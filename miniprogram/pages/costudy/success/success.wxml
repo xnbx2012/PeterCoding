@@ -1,0 +1,29 @@
+<!--pages/costudy/success/success.wxml-->
+<view class="page">
+<view class="weui-msg">
+  <view class="weui-msg__icon-area">
+    <icon type="success" size="93"></icon>
+  </view>
+  <view class="weui-msg__text-area">
+    <view class="weui-msg__title">投稿成功</view>
+    <view class="weui-msg__desc">您的文件/链接已经上传到云空间，您可以点击查看。感谢您的贡献！您的文件/链接将会在管理员审核过后合并到主资料库当中。
+    </view>
+  </view>
+  <view class="weui-msg__opr-area">
+    <view class="weui-btn-area">
+      <button class="weui-btn" type="primary" bindtap="viewFile">查看文件</button>
+      <button class="weui-btn" type="default" bindtap="upload">返回投稿</button>
+    </view>
+  </view>
+  <view class="weui-msg__extra-area">
+    <view class="weui-footer">
+      <view class="weui-footer__links">
+      </view>
+      <view class="weui-footer__text">开发者：PeterZhong</view>
+    </view>
+
+  </view>
+
+</view>
+
+</view>

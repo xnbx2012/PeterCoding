@@ -1,0 +1,244 @@
+/* miniprogram/pages/cloud/cloud.wxss */
+@import 'weui.wxss';
+.iconImage{
+  width: 25px;
+  height: 25px;
+  position: absolute;
+}
+.view_hover{
+  background-color: rgb(192,192,192);
+}
+.scroll{
+  overflow: scroll;
+  position: relative;
+  white-space: nowrap;
+  display: flex;
+  flex-direction:row;
+}
+
+.itemView{
+  flex-direction:row;
+  padding-left: 15px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: flex;
+  white-space: nowrap;
+}
+.divLine{
+  background: #E0E3DA;
+  width: 100%;
+  height: 2rpx;
+ }
+.movable-area{
+  height: 100%;
+  display: block;
+}
+.move-container{
+  height: 100%;
+}
+
+ @-webkit-keyframes ripple {
+  100% {
+    webkit-transform: scale(12);
+    transform: scale(12);
+    background-color: transparent;
+  }
+}
+.ripple {
+  background-color:aquamarine;
+  border-radius: 100%;
+  height:10px;
+  width:10px;
+  margin-top: -90px;
+  position: fixed;
+  overflow: hidden
+}
+
+.containerView{
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.9);
+  width: 90%;
+  height: 85%;
+  top: 10%;
+  left: 5%;
+  position: relative;
+  box-shadow: 0 0 7px 7px rgba(44, 137, 229, 0.6);
+}
+
+.background_view{
+  width: 100%;
+  height: 100%;
+  background-color: rgb(159, 190, 231);
+  position: absolute;
+  overflow: hidden;
+}
+
+.path{
+  overflow: scroll;
+  position: relative;
+  margin-left: 15px;
+  padding: 3px 10px;
+  border-radius: 25px;
+  height: 25px;
+  width: 85%;
+  top: 5px;
+  margin-bottom: 5px;
+  background-image: linear-gradient(30deg,#8b7839, #e6c45c);
+  color:white;
+  white-space: nowrap;
+  display: flex;
+  flex-direction:row;
+}
+
+.pathText{
+  display: inline-block;
+}
+
+.wave{
+  position: absolute;
+  top: 60%;
+	width: 200rpx;
+	height: 200rpx;
+	background-color: rgb(60, 108, 250);
+	border-radius: 50%;
+}
+.wave:before,.wave:after{
+	content: "";
+	position: absolute;
+	width: 800rpx;
+	height: 800rpx;
+	top: 320%;
+	left: 50%;
+	background-color: rgba(255, 255, 255, .4);
+	border-radius: 45%;
+	transform: translate(-50%, -70%) rotate(0);
+	animation: rotate 6s linear infinite;
+}
+.wave:after {
+	border-radius: 47%;
+	background-color: rgba(255, 255, 255, .7);
+	transform: translate(-50%, -70%) rotate(0);
+	animation: rotate 10s linear -5s infinite;
+}
+@keyframes rotate {
+	50% {
+		transform: translate(-50%, -73%) rotate(180deg);
+	} 100% {
+		transform: translate(-50%, -70%) rotate(360deg);
+	}
+}
+.wave_1{
+  position: absolute;
+  top: 180%;
+  left: 45%;
+	width: 10rpx;
+	height: 10rpx;
+	background-color: rgb(60, 108, 250);
+	border-radius: 50%;
+}
+.wave_1:before,.wave_1:after{
+	content: "";
+	position: absolute;
+	width: 600rpx;
+	height: 600rpx;
+	top: 320%;
+	left: 50%;
+	background-color: rgba(255, 255, 255, .2);
+	border-radius: 45%;
+	transform: translate(-50%, -70%) rotate(0);
+	animation: rotate 4s linear infinite;
+}
+.wave_1:after {
+	border-radius: 47%;
+	background-color: rgba(255, 255, 255, .8);
+	transform: translate(-50%, -70%) rotate(0);
+	animation: rotate 6s linear -5s infinite;
+}
+.wave_2{
+  position: absolute;
+  top: 177%;
+  left: 80%;
+	width: 10rpx;
+	height: 10rpx;
+	background-color: rgb(60, 108, 250);
+	border-radius: 50%;
+}
+.wave_2:before,.wave_2:after{
+	content: "";
+	position: absolute;
+	width: 600rpx;
+	height: 600rpx;
+	top: 320%;
+	left: 50%;
+	background-color: rgba(255, 255, 255, .3);
+	border-radius: 43%;
+	transform: translate(-50%, -70%) rotate(0);
+	animation: rotate 8s linear infinite;
+}
+.wave_2:after {
+	border-radius: 47%;
+	background-color: rgba(255, 255, 255, .8);
+	transform: translate(-50%, -70%) rotate(0);
+	animation: rotate 20s linear -5s infinite;
+}
+
+/*弹窗样式*/
+.modal-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.5;
+  overflow: hidden;
+  z-index: 9000;
+  color: #fff;
+}
+
+.modal-dialog {
+	padding: 15rpx;
+  width: 540rpx;
+  overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  z-index: 9999;
+  background: #f9f9f9;
+  margin: -180rpx 105rpx;
+  border-radius: 10rpx;
+}
+
+.weui-search-bar__box{
+  display: flex
+}
+
+.preText{
+  color: grey;
+  height: 100%;
+}
+
+.preView {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  /*justify-content: center;*/
+}
+
+.info{
+  color: #99a0a8;
+  font-size: xx-small;
+}
+
+.fileNameText{
+  font-size: large;
+  font-weight: 700;
+}
+
+.directoryNameText{
+  font-size: large;
+  font-weight: 700;
+}
+
+@import 'cloud-wxa-auto-dark.wxss'

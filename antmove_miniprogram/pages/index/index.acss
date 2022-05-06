@@ -1,0 +1,82 @@
+/* miniprogram/pages/index/index.wxss */
+.cover-view {
+    height: 200rpx;
+    background-color: white;
+    /*display: flex;*/
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0rpx;
+    right: 0rpx;
+    bottom: 0rpx;
+}
+
+.login_btn {
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+}
+
+.login_view {
+    padding: 25rpx;
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+}
+
+.img {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.nick {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.count {
+    border-radius: 7%;
+    width: 40%;
+    height: 150rpx;
+    background-color: #00a480;
+    color: #ffffff;
+    margin: 50rpx;
+    padding: 15rpx;
+}
+
+.score {
+    border-radius: 7%;
+    width: 40%;
+    height: 150rpx;
+    background-color: #ff6200;
+    color: #ffffff;
+    margin: 50rpx;
+    padding: 15rpx;
+}
+
+.count_text {
+    font-size: xx-large;
+    font-weight: 900;
+    color: #6bec3b;
+}
+
+.score_text {
+    font-size: xx-large;
+    font-weight: 900;
+    color: #fff200;
+}
+
+.horigintal {
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+}
+
+.chart {
+    height: 500rpx;
+    display: flex;
+}

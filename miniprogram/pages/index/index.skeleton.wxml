@@ -1,0 +1,48 @@
+<!--
+此文件为开发者工具生成，生成时间: 2022/2/9 上午10:31:07
+使用方法：
+在 E:\Development\PeterStudy微信小程序\PeterStudy\miniprogram\pages\index\index.wxml 引入模板
+
+```
+<import src="index.skeleton.wxml"/>
+<template is="skeleton" wx-if="{{loading}}" />
+```
+
+在 E:\Development\PeterStudy微信小程序\PeterStudy\miniprogram\pages\index\index.wxss 中引入样式
+```
+@import "./index.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="container">
+      <view>
+        <official-account></official-account>
+        <view class="horigintal">
+          <view class="score">
+            <text class="sk-transparent sk-text-18-7500-991 sk-text">上次总分成绩</text>
+            <text class="score_text sk-transparent sk-text-18-7500-787 sk-text">553</text>
+            <text class="sk-transparent sk-text-18-7500-703 sk-text">分</text>
+          </view>
+          <view class="count">
+            <text class="sk-transparent sk-text-18-7500-499 sk-text">距离高考还有</text>
+            <text class="count_text sk-transparent sk-text-18-7500-517 sk-text">482</text>
+            <text class="sk-transparent sk-text-18-7500-635 sk-text">天</text>
+          </view>
+        </view>
+        <view class="horigintal">
+          <button plain="true" type="default" class="sk-transparent sk-button sk-pseudo sk-pseudo-circle" style="border: none;">数据列表</button>
+          <button plain="true" type="default" class="sk-transparent sk-button sk-pseudo sk-pseudo-circle" style="border: none;">新增数据</button>
+          <button plain="true" type="default" class="sk-transparent sk-button sk-pseudo sk-pseudo-circle" style="border: none;">小测新增</button>
+        </view>
+        <view class="container">
+          <view bindtouchstart="touchHandlerTotal" canvas-id="lineCanvas" class="chart_wx sk-transparent sk-text-18-7500-271 sk-text sk-image">绘图区域</view>
+          <view class="space"></view>
+          <view bindtouchstart="touchHandlerThree" canvas-id="lineCanvasThree" class="chart_wx sk-transparent sk-text-18-7500-605 sk-text sk-image">绘图区域</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

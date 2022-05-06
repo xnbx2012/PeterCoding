@@ -1,0 +1,26 @@
+/* 
+此文件为开发者工具生成，生成时间: 2022/4/9 下午10:29:44
+使用方法：
+在 success.wxss 文件末尾引入样式
+```
+@import "./success-wxa-auto-dark.wxss";
+```
+ */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+    }
+
+    .weui-msg{
+        background-color: #212121;
+    }
+    .weui-msg__title{
+        color: #d1d1d1;
+    }
+    .weui-msg__desc{
+        color: #858585;
+    }
+    .weui-footer__text{
+        color: #858585;
+    }
+}

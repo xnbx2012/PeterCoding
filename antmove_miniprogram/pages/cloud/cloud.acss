@@ -1,0 +1,23 @@
+/* miniprogram/pages/cloud/cloud.wxss */
+.iconImage {
+    width: 25px;
+    height: 25px;
+}
+
+.itemView {
+    flex-direction: row;
+    padding-left: 15px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.view_hover {
+    background-color: darkgray;
+}
+
+.divLine {
+    background: #e0e3da;
+    width: 100%;
+    height: 2rpx;
+}

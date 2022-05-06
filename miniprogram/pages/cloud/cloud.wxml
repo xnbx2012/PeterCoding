@@ -1,0 +1,80 @@
+<view class="background_view">
+  <view class='wave'></view>
+  <view class='wave_1'></view>
+  <view class='wave_2'></view>
+  <scroll-view class="containerView" scroll-y="true">
+    <!--<view class="weui-search-bar">
+      <view class="weui-search-bar__form">
+          <view class="weui-search-bar__box">
+              <icon class="icon-small" type="search" size="14"></icon>
+              <input type="text" class="weui-search-bar__input" placeholder="搜索文件" 	bindconfirm='search' maxlength="10" confirm-type/>
+          </view>
+      </view>
+      <!-- 搜索按钮,调用搜索查询方法 
+      <view class="weui-search-bar__cancel-btn" bindtap='search'>搜索</view>
+    </view>-->
+    <scroll-view scroll-x="true" class="path"><text class="pathText" >{{path}}</text></scroll-view>
+    <view class="ripple" style="{{rippleStyle}}" hidden="{{hideRipple}}"></view>
+    <view>
+      <view class='preView' hover-class='view_hover' bindtap='pre'>
+        <mp-icon icon="more" size="48" class="icon" color="grey"></mp-icon>
+        <text class='preText'>返回上一级菜单</text>
+      </view>
+    </view>
+    <view class='dirListView'>
+    <block wx:for="{{items}}" wx:key="dir">
+      <view class='item' wx:key="{{item.Prefix}}" bindtap='selected' data-item= "{{item.Prefix}}" data-id="{{item.Prefix}}">
+        <view class="divLine"></view>
+        <view class='itemView' hover-class='view_hover'>
+          <image class='iconImage' src="../../images/folder.png" mode = 'aspectFit'></image>
+          <text class='directoryNameText'>  {{item.Prefix}}</text>
+        </view>
+      </view>
+    </block>
+    </view>
+    <view class='fileListView'>
+      <block wx:for="{{files}}" wx:key="file">
+        <view class='item' wx:key="{{item.Key}}" data-item= "{{item.Key}}" data-id="{{item.Key}}" bindtap='download'>
+          <view class="divLine"></view>
+          <view class='itemView' hover-class='view_hover'>
+            <image class='iconImage' src="../../images/file.png" mode = 'aspectFit'></image>
+            <text class='fileNameText' style="width:100%;">  {{item.Key}}</text>
+            <view wx:if="{{showMore}}" bindtap="btnClick" style="display:inline-block;">文件</view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class='fileListView'>
+      <block wx:for="{{result}}" wx:key="result">
+        <view class='item' wx:key="{{item.Key}}" data-item= "{{item.Key}}" data-id="{{item.Key}}" bindlongpress="search_moreaction" bindtap='search_download'>
+          <view class="divLine"></view>
+          <view class='itemView' hover-class='view_hover'>
+            <image class='iconImage' src="../../images/file.png" mode = 'aspectFit'></image>
+            <text class='fileNameText' style="width:100%;">  {{item.Key}}</text>
+            <view wx:if="{{showMore}}" bindtap="btnClick" style="display:inline-block;">文件</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>
+<mp-actionSheet bindactiontap="btnClick" show="{{showActionsheet}}" actions="{{groups}}" title="更多操作">
+</mp-actionSheet>
+
+<!--音频播放器弹窗-->
+<view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
+<view class="modal-dialog" wx:if="{{showModal}}">
+    <progress class="music-prog" bindtouchmove="setTouchMove" percent="{{musicPercent}}"></progress>
+    <view class="percent-num">{{currentTime}}秒 / {{duration}}秒</view>
+    <view class="one-column play-it" style="display:flex ; flex-flow:row;">
+      <view bindtap="playMusic"><image style="width: 35px; height: 35px;dispaly: inline-block"  src="../../images/play.png"></image></view>
+      <view bindtap="pauseMusic"><image style="width: 35px; height: 35px;dispaly: inline-block" src="../../images/pause.png"></image></view>
+    </view>
+</view> 
+
+<!--下载进度条弹窗-->
+<view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showDownloadModal}}"></view>
+<view class="modal-dialog" wx:if="{{showDownloadModal}}">
+    <progress class="music-prog" percent="{{downloadPercent}}" show-info></progress>
+    <text>{{writtenMb}}MB / {{totalMb}}MB</text>
+</view> 

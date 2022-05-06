@@ -1,0 +1,76 @@
+<!--miniprogram/pages/index/index.wxml-->
+<view class="background_view">
+  <view class='wave'></view>
+  <view class='wave_1'></view>
+  <view class='wave_2'></view>
+  <scroll-view class="containerView" scroll-y="true">
+    <view class="container">
+  <!--主数据视图，默认显示-->
+  <view>
+      <official-account></official-account>
+      <view class="horigintal">
+        <view class="score" aria-label="上次总分成绩{{score}}分"   aria-role="combobox">
+          <text aria-hidden="true">上次总分成绩</text>
+          <text class="score_text" aria-hidden="true">{{score}}</text>
+          <text aria-hidden="true">分</text>
+        </view>
+        <view class="count" aria-label="距离高考还有{{count}}天"  aria-role="combobox">
+          <text aria-hidden="true">距离高考还有</text>
+          <text class="count_text" aria-hidden="true">{{count}}</text>
+          <text aria-hidden="true">天</text>
+        </view>
+      </view>
+      <view class="horigintal">
+        <button type="default" plain="true" bindtap="list">数据列表</button>
+        <button type="default" plain="true" bindtap="add">新增数据</button>
+        <button type="default" plain="true" bindtap="sadd">小测新增</button>
+      </view>
+
+      <!--<button type="primary" plain="true" style="margin-top: 25rpx;margin-bottom: 25rpx;" bindtap="add" aria-label="新增成绩数据" aria-role="button">新增成绩数据</button>
+      <button type="primary" plain="true" style="margin-top: 25rpx;margin-bottom: 25rpx;" bindtap="list" aria-label="修改或查看成绩" aria-role="button">修改/查看成绩</button>
+      <button type="primary" plain="true" style="margin-top: 25rpx;margin-bottom: 25rpx;" bindtap="code" aria-label="扫描二维码" aria-role="button">健康码核验Beta</button>
+      <button type="primary" plain="true" style="margin-top: 25rpx;margin-bottom: 25rpx;" bindtap="face" aria-label="人脸识别" aria-role="button">生物识别Alpha</button>
+      <button type="primary" bindtap="cloud" aria-label="打开学习资料云空间" aria-role="button" style="margin-top: 25rpx;margin-bottom: 25rpx;">学习资料云</button>-->
+
+      <view class="container">
+          <canvas canvas-id="lineCanvas" class="canvas" class="chart_wx" bindtouchstart="touchHandlerTotal" style="{{canvasStyle}}" width="{{canvasWidth}}"></canvas>
+          <view class="space"></view>
+          <canvas canvas-id="lineCanvasThree" class="canvas" class="chart_wx" bindtouchstart="touchHandlerThree" style="{{canvasStyle}}" width="{{canvasWidth}}"></canvas>
+          <view class="space"></view>
+          <canvas canvas-id="lineCanvasSix" class="canvas" class="chart_wx"  bindtouchstart="touchHandler" style="{{canvasStyle}}" width="{{canvasWidth}}">
+            
+          </canvas>
+          <view class="space"></view>
+          <canvas canvas-id="radarCanvas" class="canvas" class="chart_wx" bindtouchstart="touchHandlerRadar" style="{{canvasStyle}}" width="{{canvasWidth}}"></canvas>
+          <view class="space"></view>
+      </view>
+
+      <view class="section">
+        <view class="section__title">选择显示小测成绩曲线的科目</view>
+        <picker bindchange="bindChartPickerChange" value="{{sindex2}}" range="{{sarray}}">
+          <view class="picker">
+            当前科目：{{sarray[sindex2]}}
+          </view>
+        </picker>
+        <view class="space"></view>
+        <canvas canvas-id="slineCanvas" class="canvas" class="chart_wx" bindtouchstart="stouchHandler" style="{{canvasStyle}}" width="{{canvasWidth}}"></canvas>
+        <view class="space"></view>
+      </view>
+  </view>
+
+  
+    <modal hidden="{{hiddenmodalput}}" title="新增小测成绩数据" confirm-text="提交" cancel-text="取消" bindcancel="scancel" bindconfirm="ssubmit" class="cover-view modalTitle">  
+        <view class="modalTxt" style="display: inline-flex;">输入成绩：</view>
+        <input type='text'placeholder="请输入成绩" auto-focus bindblur="stext" class="modalTxt" 	placeholder-style="color: rgb(133, 130, 130);"/>
+        <view style="display: flex;flex-direction: row;">
+            <picker bindchange="bindPickerChange" value="{{sindex}}" range="{{sarray}}" style="display: flex;flex-direction: row;">
+                <view class="picker2" style="display: inline-block;width: 320px;">
+                    选择科目：{{sarray[sindex]}}
+                </view>
+                <text style="display: inline-flex;color: cornflowerblue;">选择</text>
+            </picker>
+        </view>
+    </modal>
+</view>
+  </scroll-view>
+</view>

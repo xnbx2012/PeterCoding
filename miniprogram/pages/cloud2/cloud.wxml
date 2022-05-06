@@ -1,0 +1,103 @@
+<view class="background_view">
+  <view class='wave'></view>
+  <view class='wave_1'></view>
+  <view class='wave_2'></view>
+  <scroll-view class="containerView" scroll-y="true">
+    <view class="weui-search-bar">
+      <searchbar search="searchHandler" throttle="1000"></searchbar>
+      <view class="weui-search-bar__form">
+          <view class="weui-search-bar__box">
+              <icon class="icon-small" type="search" size="14"></icon>
+              <input type="text" class="weui-search-bar__input" placeholder="搜索文件" 	bindconfirm='search' maxlength="10" confirm-type style="color:{{color}}"/>
+          </view>
+      </view>
+      <!-- 搜索按钮,调用搜索查询方法 -->
+      <view class="weui-search-bar__cancel-btn" bindtap='search'>搜索</view>
+    </view>
+    <scroll-view scroll-x="true" class="path"><text class="pathText" selectable='true'>{{path}}</text></scroll-view>
+    <view class="ripple" style="{{rippleStyle}}" hidden="{{hideRipple}}"></view>
+    <view>
+      <view class='preView' hover-class='view_hover' bindtap='pre'>
+        <image src="../../images/pre.png" style="display:inline-block;width: 28px;height: 28px;"></image>
+        <text class='preText'>返回上一级菜单</text>
+      </view>
+    </view>
+    <view class='dirListView'>
+    <block wx:for="{{items}}" wx:key="dir">
+      <scroll-view scroll-x class='item' wx:key="{{item.Prefix}}" bindtap='selected' data-item= "{{item.Prefix}}" data-id="{{item.Prefix}}" bindlongpress="dirmoreaction">
+        <view class="divLine"></view>
+        <view class='itemView' hover-class='view_hover' style="overflow: hidden;">
+          <image class='iconImage' src="../../images/folder.png" mode = 'aspectFit'></image>
+          <text class='directoryNameText' style="overflow-x: scroll;left: 25px;position: relative;">  {{item.Prefix}}</text>
+        </view>
+      </scroll-view>
+    </block>
+    </view>
+    <view class='fileListView'>
+        <block wx:for="{{files}}" wx:key="file">
+          <view class='item'>
+            <view class="divLine"></view>
+            <view class='itemView' hover-class='view_hover'>
+                <view wx:key="{{item.Key}}" data-item= "{{item.Key}}" data-id="{{item.Key}}" catchtap='download' bindlongpress="moreaction" style="overflow: hidden;width: 100%;">
+                <image class='iconImage' src="../../images/file.png" mode = 'aspectFit'></image>
+                <scroll-view style="display:inline-block;" class="scroll" scroll-x="true">
+                    <text class='fileNameText' style="position: relative;margin-left: 25px;width: fit-content;">  {{item.Key}}</text>
+                    <view class="info">{{item.time}}  {{item.vSize}}</view>
+                </scroll-view>
+                </view>
+                <view wx:if="{{showMore}}">
+                    <view wx:if="{{showMore}}" bindtap="moreaction" style="display:inline-block;width: 36px;"  data-item= "{{item.Key}}" data-id="{{item.Key}}">
+                        <image src="../../images/more.png" style="display:inline-block;width: 28px;height: 28px;"></image>
+                    </view>
+                    <view wx:if="{{pc}}" bindtap="short_down" style="display:inline-block;width: 36px;"  data-item= "{{item.Key}}" data-id="{{item.Key}}">
+                        <image src="../../images/down.png" style="display:inline-block;width: 28px;height: 28px;"></image>
+                    </view>
+                    <view wx:if="{{mobile}}" bindtap="short_share" style="display:inline-block;width: 36px;"  data-item= "{{item.Key}}" data-id="{{item.Key}}">
+                        <image src="../../images/share.png" style="display:inline-block;width: 32px;height: 32px;"></image>
+                    </view>
+                    <view wx:if="{{showMore}}" bindtap="download" style="display:inline-block;width: 36px;"  data-item= "{{item.Key}}" data-id="{{item.Key}}">
+                        <image src="../../images/view.png" style="display:inline-block;width: 32px;height: 32px;"></image>
+                    </view>
+                </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    <view class='fileListView'>
+      <block wx:for="{{result}}" wx:key="result">
+        <view class='item' wx:key="{{item.Key}}" data-item= "{{item.Key}}" data-id="{{item.Key}}" bindlongpress="search_moreaction" bindtap='search_download2'>
+          <view class="divLine"></view>
+          <view class='itemView' hover-class='view_hover' style="width: 100%;">
+            <view>
+              <image class='iconImage' src="../../images/file.png" mode = 'aspectFit'></image>
+              <text class='fileNameText' style="width:100%;">  {{item.Key}}</text>
+            </view>
+            <view wx:if="{{showMore}}" bindtap="search_moreaction" style="display:inline-block;">···</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>
+<mp-actionSheet bindactiontap="btnClick" show="{{showActionsheet}}" actions="{{groups}}" title="更多操作">
+</mp-actionSheet>
+<mp-actionSheet bindactiontap="dirAction" show="{{showDirActionsheet}}" actions="{{dirgroups}}" title="更多操作">
+</mp-actionSheet>
+
+<!--音频播放器弹窗-->
+<view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
+<view class="modal-dialog" wx:if="{{showModal}}">
+    <progress class="music-prog" bindtouchmove="setTouchMove" percent="{{musicPercent}}" activeColor="#2c89e5"></progress>
+    <view class="percent-num">{{currentTime}}秒 / {{duration}}秒</view>
+    <view class="one-column play-it" style="display:flex ; flex-flow:row;">
+      <view bindtap="playMusic"><mp-icon icon="play" size="48" class="icon" color="grey"></mp-icon></view>
+      <view bindtap="pauseMusic"><mp-icon icon="pause" size="48" class="icon" color="grey"></mp-icon></view>
+    </view>
+</view> 
+
+<!--下载进度条弹窗-->
+<view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showDownloadModal}}"></view>
+<view class="modal-dialog" wx:if="{{showDownloadModal}}">
+    <progress class="music-prog" percent="{{downloadPercent}}" show-info activeColor="#2c89e5"></progress>
+    <text>{{writtenMb}}MB / {{totalMb}}MB</text>
+</view> 

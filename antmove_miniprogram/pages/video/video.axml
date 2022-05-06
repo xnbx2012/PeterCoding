@@ -1,0 +1,8 @@
+<view class='page-container-classname'>
+                <view class='text_view' onChildRef='saveChildRef0'>
+  <text class='text'>
+    音频预览:  </text>  <text class='text'>
+    {{key}}  </text>
+</view><audio poster='audio.png' name='{{name}}' author='PeterCoding' src='{{url}}' controls=" ">
+</audio>
+            </view>

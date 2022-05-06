@@ -1,0 +1,8 @@
+<!--miniprogram/pages/list/list.wxml-->
+<view class="container">
+  <button plain="true" style="margin-top: 25rpx;margin-bottom: 25rpx;" bindtap="add" aria-label="新增成绩数据" aria-role="button" style="color: #2c89e5;border-color: #2c89e5;">新增成绩数据</button>
+  <text class="title" aria-label="页面标题：考试列表">考试列表</text>
+  <view class='item' wx:for="{{items}}" wx:key="key">
+    <view id="{{item._id}}" bindtap="tap" style="width:100%;padding-left:25rpx;" aria-label="列表项：{{item.name}}，激活以查看或编辑数据">{{item.name}}</view>
+  </view>
+</view>

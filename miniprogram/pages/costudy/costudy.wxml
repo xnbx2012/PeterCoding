@@ -1,0 +1,54 @@
+<!--miniprogram/pages/costudy/costudy.wxml-->
+<view class="background_view">
+  <view class='wave'></view>
+  <view class='wave_1'></view>
+  <view class='wave_2'></view>
+  <scroll-view class="containerView" scroll-y="true">
+  <view class="notify">
+    <view class="marquee2" bindtransitionend="animationend" animation="{{animationData}}">
+      <text>{{notify}}</text>
+    </view>
+  </view>
+<form catchsubmit="formSubmit" catchreset="formReset" bindsubmit="submit">
+  <!--<view class="modal-title">学习资料共享</view>-->
+  <view class="page-section-title" style="margin-top: 32px;">您是否已经阅读并同意<text bindtap="detail" style="color: #2c89e5;">《资料共享约定》</text></view>
+  <view class="page-section page-section-gap detail" hidden="{{hideDetail}}">
+    <text user-select="true" >{{detail}}</text>
+    <view class="gap"></view>
+  </view>
+  <radio-group name="radio" class="page-section">
+    <label><radio value="disagree" color="#e6c407"/>不同意</label>
+    <label><radio value="agree" checked="true" color="#2c89e5" aria-checked/>已阅读并同意</label>
+  </radio-group>
+  <view class="gap"></view>
+  <view class="page-section">
+    <view class="page-section-title" aria-owns="name" aria-label="请在下方输入你的姓名">请输入你的真实姓名</view>
+    <input placeholder-class="input-holder" maxlength="4" bindinput="inputChange" class="input" placeholder="请输入你的真实姓名" name="name" value="{{realName}}" id="name"></input>
+  </view>
+  <view class="gap"></view>
+  <view class="page-section">
+    <view class="page-section-title">内容概述</view>
+    <input placeholder-class="input-holder" maxlength="10" class="input" placeholder="关于文件/链接内容的说明，作为文件夹名称" name="more"></input>
+  </view>
+  <view class="gap"></view>
+      <progress percent="{{percent}}" show-info stroke-width="3" class="page-section" activeColor="#2c89e5"/>
+    <view class="gap"></view>
+  <!--<view hidden="{{hiddenType}}">
+    <view class="page-section-title">请选择上传的文件类型</view>
+    <radio-group name="type">
+      <label><radio value="image"/>图片</label>
+      <label><radio value="doc"/>其它文件</label>
+    </radio-group>
+  </view>-->
+  <button type="primary" form-type="submit" style="background-color: #2c89e5;">{{btnText}}</button>
+  <view class="gap"></view>
+  <button bindtap="viewFile">查看已上传文件</button>
+  <text style="align-items: center; color: rgba(0,0,0,0);">
+  
+  
+
+  .
+  </text>
+</form>
+</scroll-view>
+</view>

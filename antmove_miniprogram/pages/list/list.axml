@@ -1,0 +1,10 @@
+<view class='page-container-classname'>
+                <view class='container' onChildRef='saveChildRef0'>
+  <text class='title' aria-label='页面标题：考试列表'>
+    考试列表  </text>  <view class='item' a:for='{{items}}' a:key='{{key}}' ref-numbers='{{items}}'>
+    <view id='{{item._id}}' style='width:100%;padding-left:25rpx;' onTap='tap'>
+      {{item.name}}
+    </view>
+  </view>
+</view>
+            </view>

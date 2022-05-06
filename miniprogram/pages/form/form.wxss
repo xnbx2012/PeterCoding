@@ -1,0 +1,43 @@
+/* miniprogram/pages/form/form.wxss */
+.title{
+  font-size: larger;
+  font-weight: bolder;
+  margin: auto;
+  padding-top: 50rpx;
+  margin-top: 100rpx;
+  margin-left: 35%;
+}
+
+.score{
+  margin: auto
+}
+
+.login_btn{
+  display: flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;  
+}
+
+.page-section{
+  margin-left: 45rpx;
+  margin-right: 45rpx;
+  margin-top: 15rpx;
+  margin-bottom: 30rpx;
+}
+
+form{
+  margin: auto;
+  padding: 0;
+  width: 90%;
+}
+
+.weui-cells__title{
+  font-weight: 700;
+}
+
+button .btn-area{
+  width: 90%;
+}
+
+@import 'form-wxa-auto-dark.wxss'

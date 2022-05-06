@@ -1,0 +1,132 @@
+<!--miniprogram/pages/form/form.wxml-->
+<view class="container">
+  <text class="title" aria-label="页面标题：成绩录入系统">成绩录入系统</text>
+
+  <form catchsubmit="formSubmit" catchreset="formReset">
+      <view class="page-section">
+        <view class="weui-cells__title" aria-label="考试名称">考试名称*</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" placeholder="请填写考试名称" name="name" value="{{list.name}}" aria-label="考试名称输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">语文</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试语文成绩" name="chinese" value="{{list.chinese}}" id="chinese" aria-label="语文成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">数学</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试数学成绩" name="math" value="{{list.math}}" id="math" aria-label="数学成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">英语</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试英语成绩" name="english" value="{{list.english}}" id="english"  aria-label="英语成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">物理</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试物理成绩" name="physics" value="{{list.physics}}" id="physics"  aria-label="物理成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">化学</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试化学成绩" name="chemistry" value="{{list.chemistry}}" id="chemistry"  aria-label="化学成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">政治</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试政治成绩" name="politics" value="{{list.politics}}" id="politics"  aria-label="政治成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">历史</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试历史成绩" name="history" value="{{list.history}}" id="history"  aria-label="历史成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">生物</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试生物成绩" name="biology" value="{{list.biology}}" id="biology"  aria-label="生物成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">地理</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试地理成绩" name="geography" value="{{list.geography}}" id="geography" aria-label="地理成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">总分</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试总成绩" name="total" value="{{list.total}}" bindfocus="inputFocus" id="total" aria-label="总分成绩输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">班排</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试班级排名" name="class_list" value="{{list.class_list}}" aria-label="班级排名输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">级排</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试年级排名" name="grade_list" value="{{list.grade_list}}" aria-label="年级排名输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">区排</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试全区排名" name="district_list" value="{{list.district_list}}" aria-label="区县排名输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">市排</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试全市排名" name="city_list" value="{{list.city_list}}" aria-label="市排名输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">省排</view>
+          <view class="weui-cell weui-cell_input">
+            <input class="weui-input" type="digit" placeholder="本次考试全省排名" name="province_list" value="{{list.province_list}}" aria-label="省排名输入框"/>
+          </view>
+      </view>
+
+      <view class="page-section">
+        <view class="weui-cells__title">考试日期</view>
+        <picker mode="date" value="{{list.date}}" start="2015-09-01" end="2050-09-01" bindchange="bindDateChange" name="date" aria-label="考试日期选择框">
+          <view class="date_btn" hidden="{{hidden_date}}">{{list.date}}</view><view class="picker">{{date}}</view>
+        </picker>
+      </view>
+
+      <view class="btn-area">
+        <button style="margin: 30rpx;background-color: #2c89e5;" type="primary" formType="submit" aria-label="提交数据" aria-role="button">{{submit}}</button>
+        <button style="margin: 30rpx" type="warn" hidden="{{hidden}}" plain="true" bindtap="delete" aria-label="删除数据" aria-role="button">删除数据</button>
+      </view>
+
+
+  </form>
+</view>

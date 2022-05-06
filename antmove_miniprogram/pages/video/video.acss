@@ -1,0 +1,9 @@
+/* miniprogram/pages/video.wxss */
+.video {
+    width: 90%;
+}
+
+.text_view {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

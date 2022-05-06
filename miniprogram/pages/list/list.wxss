@@ -1,0 +1,21 @@
+/* miniprogram/pages/list/list.wxss */
+.item{
+  padding-top: 25rpx;
+  padding-bottom: 25rpx;
+  margin-top: 10rpx;
+  margin-bottom: 10rpx;
+  color: #ffffff;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  border-radius: 3%;
+  background-color: #2c89e5;
+}
+
+.title{
+  margin-left: 40%;
+  font-weight: bold;
+  font-size: larger;
+  color: #2c89e5;
+}
+
+@import 'list-wxa-auto-dark.wxss'

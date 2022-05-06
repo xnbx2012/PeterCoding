@@ -1,0 +1,52 @@
+<!--
+此文件为开发者工具生成，生成时间: 2022/2/9 上午10:30:50
+使用方法：
+在 E:\Development\PeterStudy微信小程序\PeterStudy\miniprogram\pages\list\list.wxml 引入模板
+
+```
+<import src="list.skeleton.wxml"/>
+<template is="skeleton" wx-if="{{loading}}" />
+```
+
+在 E:\Development\PeterStudy微信小程序\PeterStudy\miniprogram\pages\list\list.wxss 中引入样式
+```
+@import "./list.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="container">
+      <button plain="true" style="margin-top: 12px; margin-bottom: 12px; border: none;" type="primary" class="sk-transparent sk-button sk-pseudo sk-pseudo-circle">新增成绩数据</button>
+      <text class="title sk-transparent sk-text-18-7500-383 sk-text">考试列表</text>
+      <view class="item">
+        <view id="14139e12615a3ea510f9c47d668c355e" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-896 sk-text">高一上一统</view>
+      </view>
+      <view class="item">
+        <view id="14139e12615a3ef810f9ca5752032a6d" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-408 sk-text">高一上二统</view>
+      </view>
+      <view class="item">
+        <view id="2d44d6c2615a3f4d111cf28f049de0bc" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-580 sk-text">高一上期末</view>
+      </view>
+      <view class="item">
+        <view id="cd045e75615a3f9e1305052a6136072a" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-226 sk-text">高一下一统</view>
+      </view>
+      <view class="item">
+        <view id="cd045e75615a3fe7130509d14221f4ce" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-940 sk-text">高一下二统</view>
+      </view>
+      <view class="item">
+        <view id="2d44d6c2615d28a21177247c5319810c" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-7 sk-text">高一下期末</view>
+      </view>
+      <view class="item">
+        <view id="18ed09686176b81d01d93e1025515b58" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-6 sk-text">高二上一统</view>
+      </view>
+      <view class="item">
+        <view id="0448022461ae8aad00e147e024f16c77" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-819 sk-text">高二上二统</view>
+      </view>
+      <view class="item">
+        <view id="17e3426e6201af3d0c9b1d127d067bdf" style="width:100%;padding-left:12px;" class="sk-transparent sk-text-18-7500-166 sk-text">高二上期末</view>
+      </view>
+    </view>
+  </view>
+</template>

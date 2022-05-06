@@ -1,0 +1,36 @@
+<view class='page-container-classname'>
+                <view class='container' onChildRef='saveChildRef0'>
+  <text aria-hidden='true'>
+    V3.1.2-1  </text>  
+  <view>
+    <view class='login_view'>
+      
+      <text class='nick' aria-label='用户欢迎语：欢迎您的访问'>
+        欢迎您的访问！      </text>
+    </view>    <view class='horigintal'>
+      <view class='score'>
+        <text aria-hidden='true'>
+          上次总分成绩        </text>        <text class='score_text' aria-hidden='true'>
+          {{score}}        </text>        <text aria-hidden='true'>
+          分        </text>
+      </view>      <view class='count'>
+        <text aria-hidden='true'>
+          距离高考还有        </text>        <text class='count_text' aria-hidden='true'>
+          {{count}}        </text>        <text aria-hidden='true'>
+          天        </text>
+      </view>
+    </view>    <button type='primary' plain='true' style='margin-top: 25rpx;margin-bottom: 25rpx;' aria-label='新增成绩数据' aria-role='button' class=' primary-style' onTap='add'>
+      新增成绩数据
+    </button>
+    <button type='primary' plain='true' style='margin-top: 25rpx;margin-bottom: 25rpx;' aria-label='修改或查看成绩' aria-role='button' class=' primary-style' onTap='list'>
+      修改/查看成绩
+    </button>
+    <button type='primary' aria-label='打开学习资料云空间' aria-role='button' class=' primary-style' onTap='cloud'>
+      学习资料云
+    </button>
+    <view class='chart_view'>
+      
+    </view>
+  </view>
+</view>
+            </view>

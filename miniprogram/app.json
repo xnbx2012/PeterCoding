@@ -1,0 +1,83 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/form/form",
+        "pages/list/list",
+        "pages/cloud/cloud",
+        "pages/cloud2/cloud",
+        "pages/costudy/costudy",
+        "pages/about/about",
+        "pages/costudy/success/success"
+    ],
+    "darkmode": true,
+    "sitemapLocation": "sitemap.json",
+    "style": "v2",
+    "themeLocation": "theme.json",
+    "window": {
+        "backgroundColor": "@navBgColor",
+        "backgroundTextStyle": "@bgTextStyle",
+        "navigationBarBackgroundColor": "@navBgColor",
+        "navigationBarTitleText": "Peter学习助理",
+        "navigationBarTextStyle": "@navTxtStyle",
+        "resizable": true,
+        "pageOrientation": "auto",
+        "frameset": true
+    },
+    "resizable": true,
+    "frameset": true,
+    "useExtendedLib": {
+        "weui": true
+    },
+    "tabBar": {
+        "selectedColor": "#2c89e5",
+        "borderStyle": "@tbColor",
+        "backgroundColor": "@navBgColor",
+        "color": "@tbFontColor",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "成绩助理",
+                "iconPath": "images/index.png",
+                "selectedIconPath": "images/index2.png"
+            },
+            {
+                "pagePath": "pages/cloud/cloud",
+                "text": "公有资料",
+                "iconPath": "images/cloud.png",
+                "selectedIconPath": "images/cloud2.png"
+            },
+            {
+                "pagePath": "pages/costudy/costudy",
+                "text": "内部云",
+                "iconPath": "images/costudy.png",
+                "selectedIconPath": "images/costudy2.png"
+            },
+            {
+                "pagePath": "pages/about/about",
+                "text": "关于程序",
+                "iconPath": "images/about.png",
+                "selectedIconPath": "images/about2.png"
+            }
+        ]
+    },
+    "supportedMaterials": [
+        {
+            "materialType": "application/*",
+            "name": "在${nickname}投稿上传",
+            "desc": "投稿文件资料上传到内部云空间",
+            "path": "pages/costudy/costudy"
+        },
+        {
+            "materialType": "image/*",
+            "name": "在${nickname}投稿上传",
+            "desc": "投稿图片资料上传到内部云空间",
+            "path": "pages/costudy/costudy"
+        },
+        {
+            "materialType": "text/html",
+            "name": "在${nickname}投稿上传",
+            "desc": "投稿链接上传到内部云空间",
+            "path": "pages/costudy/costudy"
+        }
+    ]
+}

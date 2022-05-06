@@ -1,0 +1,121 @@
+<!--
+此文件为开发者工具生成，生成时间: 2022/2/9 上午10:30:36
+使用方法：
+在 E:\Development\PeterStudy微信小程序\PeterStudy\miniprogram\pages\cloud\cloud.wxml 引入模板
+
+```
+<import src="cloud.skeleton.wxml"/>
+<template is="skeleton" wx-if="{{loading}}" />
+```
+
+在 E:\Development\PeterStudy微信小程序\PeterStudy\miniprogram\pages\cloud\cloud.wxss 中引入样式
+```
+@import "./cloud.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="background_view">
+      <view class="wave sk-pseudo sk-pseudo-circle"></view>
+      <scroll-view class="containerView" scroll-y="true">
+        <view class="weui-search-bar">
+          <view class="weui-search-bar__form">
+            <view class="weui-search-bar__box">
+              <icon class="icon-small sk-image" size="14" type="search" color="#EFEFEF"></icon>
+              <view class="weui-search-bar__input sk-image" maxlength="10" placeholder="搜索文件" type="text"></view>
+            </view>
+          </view>
+        </view>
+        <scroll-view class="path" scroll-x="true">
+          <text class="pathText"></text>
+        </scroll-view>
+        <view>
+          <view class="itemView" hover-class="view_hover">
+            <image class="iconImage sk-image" mode="aspectFit"></image>
+            <text class="directoryNameText sk-transparent sk-text-18-7500-946 sk-text">    返回上一级菜单</text>
+          </view>
+        </view>
+        <view class="dirListView">
+          <view class="item" data-id="临时文件" data-item="临时文件">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-453 sk-text">  临时文件</text>
+            </view>
+          </view>
+          <view class="item" data-id="共享资料" data-item="共享资料">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-341 sk-text">  共享资料</text>
+            </view>
+          </view>
+          <view class="item" data-id="初中" data-item="初中">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-946 sk-text">  初中</text>
+            </view>
+          </view>
+          <view class="item" data-id="实用软件工具" data-item="实用软件工具">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-694 sk-text">  实用软件工具</text>
+            </view>
+          </view>
+          <view class="item" data-id="年级数据" data-item="年级数据">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-951 sk-text">  年级数据</text>
+            </view>
+          </view>
+          <view class="item" data-id="电子课本" data-item="电子课本">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-360 sk-text">  电子课本</text>
+            </view>
+          </view>
+          <view class="item" data-id="高一" data-item="高一">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-826 sk-text">  高一</text>
+            </view>
+          </view>
+          <view class="item" data-id="高中整体" data-item="高中整体">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-784 sk-text">  高中整体</text>
+            </view>
+          </view>
+          <view class="item" data-id="高二" data-item="高二">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="directoryNameText sk-transparent sk-text-18-7500-842 sk-text">  高二</text>
+            </view>
+          </view>
+        </view>
+        <view class="fileListView">
+          <view class="item" data-id="维克多100~150生词.xlsx" data-item="维克多100~150生词.xlsx">
+            <view class="divLine"></view>
+            <view class="itemView" hover-class="view_hover">
+              <image class="iconImage sk-image" mode="aspectFit"></image>
+              <text class="fileNameText sk-transparent sk-text-18-7500-494 sk-text" style="width:100%;">  维克多100~150生词.xlsx</text>
+            </view>
+          </view>
+        </view>
+        <view class="fileListView"></view>
+      </scroll-view>
+    </view>
+    <view is="miniprogram_npm/weui-miniprogram/actionsheet/actionsheet">
+      <view class="weui-mask actionsheet--weui-mask weui-mask_hidden actionsheet--weui-mask_hidden"></view>
+    </view>
+  </view>
+</template>

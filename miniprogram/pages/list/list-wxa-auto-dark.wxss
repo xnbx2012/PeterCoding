@@ -1,0 +1,19 @@
+/* 
+此文件为开发者工具生成，生成时间: 2022/2/9 上午10:29:00
+使用方法：
+在 list.wxss 文件末尾引入样式
+```
+@import "./list-wxa-auto-dark.wxss";
+```
+ */
+
+@media (prefers-color-scheme: dark) {
+    .item {
+        color: rgb(17, 17, 17);
+        background-color: #2c89e5;
+    }
+
+    .title {
+        color: #2c89e5;
+    }
+}

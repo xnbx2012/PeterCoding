@@ -1,0 +1,4 @@
+/* pages/costudy/success/success.wxss */
+
+
+@import 'success-wxa-auto-dark.wxss'

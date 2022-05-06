@@ -1,0 +1,112 @@
+/* 
+此文件为开发者工具生成，生成时间: 2022/2/9 上午10:28:24
+使用方法：
+在 costudy.wxss 文件末尾引入样式
+```
+@import "./costudy-wxa-auto-dark.wxss";
+```
+ */
+
+@media (prefers-color-scheme: dark) {
+    .show-btn {
+        color: rgb(0, 97, 0);
+    }
+
+    .modal-mask {
+        background: rgb(255, 255, 255);
+        color: rgb(17, 17, 17);
+    }
+
+    .modal-dialog {
+        background: rgb(22, 22, 22);
+    }
+
+    .modal-title {
+        color: rgb(255, 255, 255);
+    }
+
+    .modal-input {
+        background: rgb(17, 17, 17);
+        border: rgb(0, 0, 0);
+    }
+
+    .input {
+        color: #adabab;
+    }
+
+    input-holder {
+        color: rgb(149, 149, 149);
+    }
+
+    .modal-footer {
+        border-top: rgb(0, 0, 0);
+    }
+
+    .btn-cancel {
+        color: rgb(149, 149, 149);
+        border-right: rgb(0, 0, 0);
+    }
+
+    .btn-confirm {
+        color: rgb(0, 97, 0);
+    }
+    text{
+        color: rgb(200,200,200)
+    }
+    .background_view {
+        background-color: rgb(17, 23, 24);
+    }
+    .containerView {
+        background-color: rgba(46, 46, 46, 0.9);
+        box-shadow: 0 0 7px 7px rgba(62,112,209,0.6);
+    }
+    .notify {
+        color:white;
+        background-image: linear-gradient(30deg,#8b7839, #e6c45c);
+    }
+    .wave {
+        background-color: rgb(87, 126, 255);
+    }
+
+    .wave:before, .wave:after {
+        background-color: rgba(17, 17, 17, 0.4);
+    }
+
+    .wave:after {
+        background-color: rgba(17, 17, 17, 0.7);
+    }
+
+    @keyframes rotate {
+        50% {
+            transform: translate(-50%, -73%) rotate(180deg);
+        }
+
+        100% {
+            transform: translate(-50%, -70%) rotate(360deg);
+        }
+    }
+
+    .wave_1 {
+        background-color: rgb(87, 126, 255);
+    }
+
+    .wave_1:before, .wave_1:after {
+        background-color: rgba(17, 17, 17, 0.2);
+    }
+
+    .wave_1:after {
+        background-color: rgba(17, 17, 17, 0.8);
+    }
+
+    .wave_2 {
+        background-color: rgb(87, 126, 255);
+    }
+
+    .wave_2:before, .wave_2:after {
+        background-color: rgba(17, 17, 17, 0.3);
+    }
+
+    .wave_2:after {
+        background-color: rgba(17, 17, 17, 0.8);
+    }
+}
