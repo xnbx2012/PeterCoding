@@ -32,7 +32,8 @@ Page({
     color: "black",
     bucket: "highschool-1256959209",
     pc: false,
-    mobile: true
+    mobile: true,
+    downloadTask: {}
   },
   getOptions() {
     // 获取当前小程序的页面栈  
@@ -517,20 +518,28 @@ Page({
                           wx.hideLoading()
                         },
                         fail(res){
-                          console.error(res)
-                          wx.showModal({
-                            title: '文件打开失败',
-                            content: JSON.stringify(res)+"请截图联系开发者"
-                          })
+                          if(res.errMsg=="downloadFile:fail abort"){
+                            //用户主动取消下载
+                          }else{
+                              console.error(res)
+                              wx.showModal({
+                                  title: '文件下载失败',
+                                  content: JSON.stringify(res)+"请截图联系开发者"
+                              })
+                          }
                         }
                     })
                 },
                 fail(res){
-                  console.error(res)
-                  wx.showModal({
-                    title: '文件下载失败',
-                    content: JSON.stringify(res)+"请截图联系开发者"
-                  })
+                    if(res.errMsg=="downloadFile:fail abort"){
+                        //用户主动取消下载
+                    }else{
+                        console.error(res)
+                        wx.showModal({
+                            title: '文件下载失败',
+                            content: JSON.stringify(res)+"请截图联系开发者"
+                        })
+                    }
                 },
                 complete(){
                   that.setData({
@@ -539,6 +548,7 @@ Page({
                   })
                 }
               })
+              that.setData({downloadTask: downloadTask})
               downloadTask.onProgressUpdate(function(res){
                 var progress=res.progress
                 var totalMb=res.totalBytesExpectedToWrite/1024/1024
@@ -602,7 +612,7 @@ Page({
             }else{
               wx.showModal({
                 title:"提示",
-                content:"暂不支持预览该类型文件，请尝试用手机打开。",
+                content:"电脑暂不支持预览该类型文件，请尝试用手机打开。",
                 showCancel:false
               })
               wx.hideLoading()
@@ -614,11 +624,6 @@ Page({
               that.setData({
                 showDownloadModal:true,
                 downloadPercent:0
-              })
-              wx.getSavedFileList({
-                success (res) {
-                  console.log(res.fileList)
-                }
               })
               const basepath = `${wx.env.USER_DATA_PATH}/`
               var downloadTask=wx.downloadFile({
@@ -644,11 +649,15 @@ Page({
                     })
                 },
                 fail(res){
-                  console.error(res)
-                  wx.showModal({
-                    title: '文件下载失败',
-                    content: JSON.stringify(res)+"请截图联系开发者"
-                  })
+                    if(res.errMsg=="downloadFile:fail abort"){
+                        //用户主动取消下载
+                    }else{
+                        console.error(res)
+                        wx.showModal({
+                            title: '文件下载失败',
+                            content: JSON.stringify(res)+"请截图联系开发者"
+                        })
+                    }
                 },
                 complete(){
                   that.setData({
@@ -657,6 +666,7 @@ Page({
                   })
                 }
               })
+              that.setData({downloadTask: downloadTask})
               downloadTask.onProgressUpdate(function(res){
                 var progress=res.progress
                 var totalMb=res.totalBytesExpectedToWrite/1024/1024
@@ -767,7 +777,71 @@ Page({
               that.cosPreview(item) //调用COS的预览接口支持预览
             }else{
               console.log(cosSupportB)
-              wx.setClipboardData({
+              that.setData({
+                showDownloadModal:true,
+                downloadPercent:0
+              })
+              const basepath = `${wx.env.USER_DATA_PATH}/`
+              var downloadTask=wx.downloadFile({
+                url: url,
+                filePath: basepath+fileName,
+                success (res) {
+                    wx.openDocument({
+                        filePath: res.filePath,
+                        fileType: ending.substring(1,ending.length),
+                        showMenu: true,
+                        success(){
+                        },
+                        complete: function(){
+                          wx.hideLoading()
+                        },
+                        fail(res){
+                          console.error(res)
+                          if(res.errMsg=="openDocument:fail filetype not supported"){
+                            wx.showModal({
+                                title: '不支持的格式',
+                                content: "暂不支持该文件格式的预览，请复制链接到浏览器下载查看。"
+                            })
+                          }else if(res.errMsg=="downloadFile:fail abort"){
+                              //用户主动取消下载
+                          }else{
+                              console.error(res)
+                              wx.showModal({
+                                  title: '文件下载失败',
+                                  content: JSON.stringify(res)+"请截图联系开发者"
+                              })
+                          }
+                        }
+                    })
+                },
+                fail(res){
+                  console.error(res)
+                  wx.showModal({
+                    title: '文件下载失败',
+                    content: JSON.stringify(res)+"请截图联系开发者"
+                  })
+                },
+                complete(){
+                  that.setData({
+                    showDownloadModal:false,
+                    downloadPercent:0
+                  })
+                }
+              })
+              that.setData({downloadTask: downloadTask})
+              downloadTask.onProgressUpdate(function(res){
+                var progress=res.progress
+                var totalMb=res.totalBytesExpectedToWrite/1024/1024
+                var writtenMb=res.totalBytesWritten/1024/1024
+                totalMb=totalMb.toFixed(2)
+                writtenMb=writtenMb.toFixed(2)
+                that.setData({
+                  downloadPercent: progress,
+                  totalMb: totalMb,
+                  writtenMb: writtenMb
+                })
+              })
+              /*wx.setClipboardData({
                 data: url,
                 success: function(){
                   wx.showModal({
@@ -786,7 +860,7 @@ Page({
                     content: JSON.stringify(res)+"请截图联系开发者"
                   })
                 }
-              })
+              })*/
             }
           }
         },
@@ -840,7 +914,7 @@ Page({
         console.log(finalUrl)
         const basepath = `${wx.env.USER_DATA_PATH}/`
         var downloadTask=wx.downloadFile({
-          filePath: basepath+fileName,
+          filePath: basepath+fileName+".pdf",
           url: finalUrl,
           success (res) {
               wx.openDocument({
@@ -853,11 +927,15 @@ Page({
                     wx.hideLoading()
                   },
                   fail(res){
-                    console.error(res)
-                    wx.showModal({
-                      title: '文件打开失败',
-                      content: JSON.stringify(res)+"请截图联系开发者"
-                    })
+                    if(res.errMsg=="downloadFile:fail abort"){
+                      //用户主动取消下载
+                    }else{
+                        console.error(res)
+                        wx.showModal({
+                            title: '文件下载失败',
+                            content: JSON.stringify(res)+"请截图联系开发者"
+                        })
+                    }
                   }
               })
           },
@@ -875,6 +953,7 @@ Page({
             })
           }
         })
+        that.setData({downloadTask: downloadTask})
         downloadTask.onProgressUpdate(function(res){
           if(!that.data.showDownloadModal){
             that.setData({
@@ -993,11 +1072,15 @@ Page({
                     wx.hideLoading()
                   },
                   fail(res){
-                    console.error(res)
-                    wx.showModal({
-                      title: '错误',
-                      content: "文件打开失败。"
-                    })
+                    if(res.errMsg=="downloadFile:fail abort"){
+                      //用户主动取消下载
+                    }else{
+                        console.error(res)
+                        wx.showModal({
+                            title: '文件下载失败',
+                            content: JSON.stringify(res)+"请截图联系开发者"
+                        })
+                    }
                   }
               })
           },
@@ -1014,6 +1097,7 @@ Page({
             })
           }
         })
+        that.setData({downloadTask: downloadTask})
         downloadTask.onProgressUpdate(function(res){
           var progress=res.progress
           var totalMb=res.totalBytesExpectedToWrite/1024/1024
@@ -2085,5 +2169,12 @@ Page({
       array[i] =bytes[i];
     }
     return array.buffer;
+  },
+  abortDownload:function(res) {
+      this.data.downloadTask.abort()
+      this.setData({showDownloadModal:false,downloadPercent:0,totalMb:0,writtenMb:0})
+      wx.showToast({
+        title: '已取消下载',
+      })
   }
 })

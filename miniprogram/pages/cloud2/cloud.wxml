@@ -98,6 +98,7 @@
 <!--下载进度条弹窗-->
 <view class="modal-mask" catchtouchmove="preventTouchMove" wx:if="{{showDownloadModal}}"></view>
 <view class="modal-dialog" wx:if="{{showDownloadModal}}">
-    <progress class="music-prog" percent="{{downloadPercent}}" show-info activeColor="#2c89e5"></progress>
-    <text>{{writtenMb}}MB / {{totalMb}}MB</text>
-</view> 
+<progress class="music-prog" percent="{{downloadPercent}}" show-info activeColor="#2c89e5"></progress>
+<text>{{writtenMb}}MB / {{totalMb}}MB</text>
+<icon class="icon-small" type="cancel" size="23" bindtap="abortDownload"></icon>
+</view>
