@@ -4,7 +4,7 @@
   <view class='wave_1'></view>
   <view class='wave_2'></view>
   <scroll-view class="containerView" scroll-y="true">
-    <view scroll-x="true" class="version">当前小程序版本：4.2.1</view>
+    <view scroll-x="true" class="version">当前小程序版本：{{version}}</view>
     <view class="section">
     <picker mode="date" value="{{date}}" end="2099" bindchange="bindDateChange" fields="year">
       <view class="picker">
@@ -13,16 +13,28 @@
     </picker>
   <view>
     <view style="padding-left: 5px;">已累计为您节省流量：{{size}}</view>
+    <view style="height: 50px;"></view>
+    <view>欢迎长按识别下面的二维码，关注开发者的公众号，开发者如果有时间会发布关于小程序的使用说明和问题解决，还有更多学习资料等着你！</view>
+    <view style="align-items: center;display: flex;">
+    <image src="../../images/official.jpg" show-menu-by-longpress="true" style="width: 100px;height: 100px;"></image>
+</view>
   <view class="open-source">
 </view>
   本项目已开源，请点击图标查看，欢迎Star！
     <image style="width: 32px; height: 32px;" mode="scaleToFill" src="../../images/github.png" bindtap="github"></image>
     <image style="width: 32px; height: 32px;" mode="scaleToFill" src="../../images/gitee.png" bindtap="githee"></image>
   </view>
-  <button type="primary" open-type="feedback" style="background-color:#2c89e5; margin-bottom: 25px;">意见反馈</button>
-  <button plain="true" bindtap="clear" style="background-color:#2c89e5;">清除缓存</button>
+  <button type="primary" bindtap="feedback" style="background-color:#2c89e5; margin-bottom: 25px;">意见反馈</button>
+  <button plain="true" bindtap="clear" style="color: #2c89e5;border-color: #2c89e5;">清除缓存</button>
   <view class="log">
 <text user-select="true" style="overflow-y: scroll;">
+2022.07.15(v4.2.2)
+· 新增 接入完善的意见反馈机制
+· 新增 流量节省程序MD5校验
+· 优化 公有资料页面代码结构
+· 优化 平板电脑上使用体验（待适配）
+· 新增 主页及关于页公告弹框
+
 2022.07.10(v4.2.1)
 · 新增 文件自动缓存节省流量
 · 新增 清除缓存按钮

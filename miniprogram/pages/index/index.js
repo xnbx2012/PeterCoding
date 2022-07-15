@@ -126,6 +126,24 @@ Page({
         updater.applyUpdate()
       }
     })
+    const db2 = wx.cloud.database()
+    var pageIndex = 1
+    db2.collection('info').where({
+        tag: "notify"
+    }).get({
+        success(res) {
+            var notify = res.data[0].content[pageIndex - 1]
+            if (notify == "") {
+                console.log("暂无公告")
+            } else {
+                wx.showModal({
+                    showCancel: false,
+                    title: "公告",
+                    content: notify
+                })
+            }
+        }
+    })
     this.cWidth = wx.getSystemInfoSync().windowWidth;
     this.cHeight = 500 / 750 * wx.getSystemInfoSync().windowWidth;
     this.getServerData()

@@ -6,7 +6,8 @@ Page({
    */
   data: {
     date: 2022,
-    size: 0
+    size: 0,
+    verison: "4.2.1"
   },
 
   /**
@@ -51,6 +52,25 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var that=this
+    const db2 = wx.cloud.database()
+    var pageIndex = 4
+    db2.collection('info').where({
+        tag: "notify"
+    }).get({
+        success(res) {
+            var notify = res.data[0].content[pageIndex - 1]
+            if (notify == "") {
+                console.log("暂无公告")
+            } else {
+                wx.showModal({
+                    showCancel: false,
+                    title: "公告",
+                    content: notify
+                })
+            }
+        }
+    })
   },
 
   /**
@@ -271,5 +291,24 @@ Page({
         result=(bite/(1024)).toFixed(2)+"KB"
     }
     return result
+  },
+
+  feedback:function() {
+    var sysinfo=wx.getSystemInfoSync()
+    var that=this
+    wx.openEmbeddedMiniProgram({
+        appId: "wx8abaf00ee8c3202e",
+        extraData :{
+          // 把1368数字换成你的产品ID，否则会跳到别的产品
+          id : "418719",
+          // 自定义参数，具体参考文档
+          customData : {
+              os: sysinfo.platform,
+              osVersion: sysinfo.system,
+              clientVersion: that.version,
+              clientInfo: sysinfo.brand+" | "+sysinfo.model
+          }
+        }
+      })
   }
 })
