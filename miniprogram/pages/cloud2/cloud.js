@@ -26,7 +26,7 @@ Page({
     ],
     url:"",
     audioContext:{},
-    showMore:true,
+    showMore:false,
     showDownloadModal:false,
     img_list:[],
     color: "black",
@@ -60,8 +60,9 @@ Page({
       success: (sys) => {
         console.log(sys)
         var platform=sys.platform
+        var screenWidth = sys.screenWidth
+        console.log("屏幕宽度：",screenWidth)
         if(platform == "windows" || platform=="mac" || platform=="pc"){
-          var pc=true
           console.log("PC")
           that.setData({
               showMore:true,
@@ -76,6 +77,11 @@ Page({
             })
         }else{
           console.log("Not PC",platform)
+          if(screenWidth>500){
+              that.setData({
+                showMore:true
+              })
+          }
           that.setData({
             groups: [
                 { text: '复制链接', value: 1 },
@@ -87,28 +93,6 @@ Page({
         }
       }
     })
-    //START 清除缓存文件
-    var fs = wx.getFileSystemManager()
-    fs.readdir({
-      dirPath: `${wx.env.USER_DATA_PATH}`,
-      success(res) {
-        var listFile=res.files
-        for(var index in listFile){
-          if(listFile[index] != "miniprogramLog"){
-            var tmpPath=`${wx.env.USER_DATA_PATH}/`+ listFile[index]
-            fs.unlink({
-              filePath: tmpPath,
-              success(res){console.log(res)},
-              fail(res){console.error(res)}
-            })
-          }
-        }
-      },
-      fail(res) {
-        console.error(res)
-      }
-    })
-    //END 清除缓存文件
     wx.getSystemInfo({
       success: function(res){
         if(res.theme=="dark"){
@@ -393,486 +377,594 @@ Page({
 
   download: function(res){
     if(res.currentTarget.dataset.item!=this.data.path){
-      wx.showLoading({title: '初始化下载信息'})
+      var fs = wx.getFileSystemManager()
+      var item=res.currentTarget.dataset.item
+      var item_name=item.substring(item.lastIndexOf("/")+1,item.length)
       var that=this
-      var url = this.data.cos.getObjectUrl({
-        Bucket: that.data.bucket,
-        Region: 'ap-guangzhou',
-        Key: that.data.path+"/"+res.currentTarget.dataset.item
-      });
-      var item=that.data.path+"/"+res.currentTarget.dataset.item
-      var fileName=item.substring(item.lastIndexOf("/")+1,item.length)
-      console.log(res)
-      //判断文档、图片、视频并执行预览
-      var docEnding=[".docx",".doc",".xls",".xlsx",".pdf",".ppt",".pptx"]
-      var imgEnding=[".jpg",".png",".jpeg",".gif"]
-      var videoEnding=[".mp3",".wav",".flac"]
-      var cosSupport=["pot","potx","pps","ppsx","dps","dpt","pptm","potm","ppsm","dot","wps","wpt","dotx","docm","dotm","xlt","et","ett","xltx","csv","xlsb","xlsm","xltm","ets","lrc","c","cpp","h","asm","s","java","asp","bat","bas","prg","cmd","rtf","txt","log","xml","htm","html"]
-      var isDoc=false
-      var isImg=false
-      var isVideo=false
-      var cosSupportB=false
-      var pause=true
-      var img_list=[]
-      var ending=fileName.substring(fileName.lastIndexOf("."),fileName.length)
-      for(item in docEnding){
-        if(ending==docEnding[item]){
-          isDoc=true
-        }else if(ending==imgEnding[item]){
-          isImg=true
-          /*this.data.cos.getBucket({
-            Bucket: that.data.bucket, // 填入您自己的存储桶，必须字段 
-            Region: 'ap-guangzhou',  // 存储桶所在地域，例如ap-beijing，必须字段 
-            Prefix: that.data.path,           // Prefix表示列出的object的key以prefix开始，非必须 
-            Delimiter: '/'
-          }, function(err, data) {
-            if (err) {
-              console.error(err)
-              wx.showModal({
-                title: '获取文件列表失败',
-                content: JSON.stringify(err)+"请截图联系开发者"
-              })
-              return console.log('list error:', err);
-            } else {
-                var arr=data.Contents
-                for (let i = 0, len = arr.length; i < len; i++) {
-                  var item=arr[i]
-                  var img_key=item.Key
-                  var tmp_url = that.data.cos.getObjectUrl({
-                    Bucket: that.data.bucket,
-                    Region: 'ap-guangzhou',
-                    Key: img_key
-                  });
-                  img_list[i]=tmp_url
-                }
-                that.setData({img_list: img_list})
-                pause=false
+      fs.readdir({
+        dirPath: `${wx.env.USER_DATA_PATH}`,
+        success(res) {
+          var listFile=res.files
+          console.log("item:",item_name)
+          var audio=item_name.endsWith(".mp3")
+          var fileInfos=that.data.files
+          var md5_remote=""
+          var md5_local=""
+          for(var fileItem in fileInfos){
+            if(fileInfos[fileItem].Key==item_name){
+                md5_remote=fileInfos[fileItem].md5.replaceAll("\"","")
+                console.log("remote",md5_remote)
             }
-          });*/
-        }else if(ending==videoEnding[item]){
-          isVideo=true
-        }else{
-
-        }
-      }
-      for(var endFix in cosSupport){
-        if(ending=="."+cosSupport[endFix]){
-          cosSupportB=true
-        }
-      }
-      item=that.data.path+""+res.currentTarget.dataset.item
-      var fileobjList=that.data.files
-      var fileinfo={}
-      for(var index in fileobjList){
-        if(fileobjList[index].Key==res.currentTarget.dataset.item){
-          fileinfo=fileobjList[index]
-        }
-      }
-      if(fileinfo.size > 100*1024*1024){
-        //大于10MB的文件微信不能直接预览
-        console.warn("文件大于20MB")
-        isDoc=false
-        if(ending==".ppt",".pptx",".xls",".xlsx"){
-          cosSupportB=true
-          console.log("cos support max file")
-        }else{
-          
-        }
-      }
-      console.log(fileinfo)
-      var platform=""
-      var pc=false
-      wx.getSystemInfo({
-        success: (sys) => {
-          platform=sys.platform
-          getApp().globalData.path=that.data.path
-          console.log("Set path global",getApp())
-          if(platform == "windows" || platform=="mac" || platform=="pc"){
-            pc=true
           }
-          if(pc){
-            console.log(pc)
-            if(ending==".doc" || ending==".docx" || ending==".pdf"){
-              console.log("直接支持PC端预览")
-              that.setData({
-                showDownloadModal:true,
-                downloadPercent:0
-              })
-              wx.getSavedFileList({
-                success (res) {
-                  console.log(res.fileList)
-                }
-              })
-              const basepath = `${wx.env.USER_DATA_PATH}/`
-              var downloadTask=wx.downloadFile({
-                url: url,
-                filePath: basepath+fileName,
-                success (res) {
-                    wx.openDocument({
-                        filePath: res.filePath,
-                        fileType: ending.substring(1,ending.length),
-                        showMenu: true,
-                        success(){
-                        },
-                        complete: function(){
-                          wx.hideLoading()
-                        },
-                        fail(res){
-                          if(res.errMsg=="downloadFile:fail abort"){
-                            //用户主动取消下载
-                          }else{
-                              console.error(res)
-                              wx.showModal({
-                                  title: '文件下载失败',
-                                  content: JSON.stringify(res)+"请截图联系开发者"
+          if(listFile.indexOf(item_name) > -1 &&  !audio){ //有缓存文档文件
+            console.log("使用缓存文件")
+            var cachePath=`${wx.env.USER_DATA_PATH}/`+ item_name
+            wx.getFileInfo({
+              filePath: cachePath,
+              digestAlgorithm: "md5",
+              success: function (res) {
+                  md5_local=res.digest
+                  if(md5_local==md5_remote){
+                      console.log("MD5校验通过")
+                      fs.getFileInfo({
+                        filePath: cachePath,
+                        success:function(res) {
+                            var size=res.size
+                            console.log(res.size)
+                            wx.getStorage({
+                                key: 'savedSize',
+                                success (res) {
+                                  console.log(res.data)
+                                  wx.setStorage({
+                                    key: "savedSize",
+                                    data: res.data+size
+                                  })
+                                  wx.openDocument({
+                                    filePath: cachePath,
+                                    showMenu: true,
+                                    success(){
+                                    },
+                                    complete: function(){
+                                        wx.hideLoading()
+                                        return
+                                    },
+                                    fail(res){
+                                        if(res.errMsg=="downloadFile:fail abort"){
+                                        //用户主动取消下载
+                                        }else{
+                                            console.error(res)
+                                            wx.showModal({
+                                                title: '文件打开失败',
+                                                content: JSON.stringify(res)+"请截图联系开发者"
+                                            })
+                                        }
+                                    }
+                                })
+                                },
+                                fail:function(res) {
+                                    wx.setStorage({
+                                        key: "savedSize",
+                                        data: size
+                                    })                            
+                                }
                               })
-                          }
                         }
                     })
+                    }
+              }
+            })
+          }else if(listFile.indexOf(item_name+".pdf") > -1) { //有缓存PDF文件
+            console.log("使用缓存PDF文件")
+            var cachePath=`${wx.env.USER_DATA_PATH}/`+ item_name+".pdf"
+            wx.openDocument({
+                filePath: cachePath,
+                showMenu: true,
+                success(){
+                },
+                complete: function(){
+                  wx.hideLoading()
+                  return
                 },
                 fail(res){
-                    if(res.errMsg=="downloadFile:fail abort"){
-                        //用户主动取消下载
-                    }else{
-                        console.error(res)
-                        wx.showModal({
-                            title: '文件下载失败',
-                            content: JSON.stringify(res)+"请截图联系开发者"
-                        })
-                    }
-                },
-                complete(){
-                  that.setData({
-                    showDownloadModal:false,
-                    downloadPercent:0
-                  })
+                  if(res.errMsg=="downloadFile:fail abort"){
+                    //用户主动取消下载
+                  }else{
+                      console.error(res)
+                      wx.showModal({
+                          title: '文件打开失败',
+                          content: JSON.stringify(res)+"请截图联系开发者"
+                      })
+                  }
                 }
-              })
-              that.setData({downloadTask: downloadTask})
-              downloadTask.onProgressUpdate(function(res){
-                var progress=res.progress
-                var totalMb=res.totalBytesExpectedToWrite/1024/1024
-                var writtenMb=res.totalBytesWritten/1024/1024
-                totalMb=totalMb.toFixed(2)
-                writtenMb=writtenMb.toFixed(2)
-                that.setData({
-                  downloadPercent: progress,
-                  totalMb: totalMb,
-                  writtenMb: writtenMb
-                })
-              })
-            }else if(isImg){
-                wx.showLoading({
-                    title: '加载中...',
-                })
-                that.data.cos.getBucket({
-                Bucket: that.data.bucket, // 填入您自己的存储桶，必须字段 
-                Region: 'ap-guangzhou',  // 存储桶所在地域，例如ap-beijing，必须字段 
-                Prefix: that.data.path,           // Prefix表示列出的object的key以prefix开始，非必须 
-                Delimiter: '/'
+            })
+          }else{
+            console.log("全新下载文件")
+            wx.showLoading({title: '初始化下载信息'})
+            var url = that.data.cos.getObjectUrl({
+                Bucket: that.data.bucket,
+                Region: 'ap-guangzhou',
+                Key: that.data.path+"/"+item_name
+            });
+            var fileName=item.substring(item.lastIndexOf("/")+1,item.length)
+            console.log(res)
+            //判断文档、图片、视频并执行预览
+            var docEnding=[".docx",".doc",".xls",".xlsx",".pdf",".ppt",".pptx"]
+            var imgEnding=[".jpg",".png",".jpeg",".gif"]
+            var videoEnding=[".mp3",".wav",".flac"]
+            var cosSupport=["pot","potx","pps","ppsx","dps","dpt","pptm","potm","ppsm","dot","wps","wpt","dotx","docm","dotm","xlt","et","ett","xltx","csv","xlsb","xlsm","xltm","ets","lrc","c","cpp","h","asm","s","java","asp","bat","bas","prg","cmd","rtf","txt","log","xml","htm","html"]
+            var isDoc=false
+            var isImg=false
+            var isVideo=false
+            var cosSupportB=false
+            var pause=true
+            var img_list=[]
+            var ending=fileName.substring(fileName.lastIndexOf("."),fileName.length)
+            for(item in docEnding){
+                if(ending==docEnding[item]){
+                isDoc=true
+                }else if(ending==imgEnding[item]){
+                isImg=true
+                /*this.data.cos.getBucket({
+                    Bucket: that.data.bucket, // 填入您自己的存储桶，必须字段 
+                    Region: 'ap-guangzhou',  // 存储桶所在地域，例如ap-beijing，必须字段 
+                    Prefix: that.data.path,           // Prefix表示列出的object的key以prefix开始，非必须 
+                    Delimiter: '/'
                 }, function(err, data) {
-                if (err) {
+                    if (err) {
                     console.error(err)
                     wx.showModal({
-                    title: '获取文件列表失败',
-                    content: JSON.stringify(err)+"请截图联系开发者"
+                        title: '获取文件列表失败',
+                        content: JSON.stringify(err)+"请截图联系开发者"
                     })
                     return console.log('list error:', err);
-                } else {
-                    var arr=data.Contents
-                    for (let i = 0, len = arr.length; i < len; i++) {
+                    } else {
+                        var arr=data.Contents
+                        for (let i = 0, len = arr.length; i < len; i++) {
                         var item=arr[i]
                         var img_key=item.Key
                         var tmp_url = that.data.cos.getObjectUrl({
-                        Bucket: that.data.bucket,
-                        Region: 'ap-guangzhou',
-                        Key: img_key
+                            Bucket: that.data.bucket,
+                            Region: 'ap-guangzhou',
+                            Key: img_key
                         });
-                        if(item.Key!=that.data.path){
-                        img_list.push(tmp_url)
-                        console.log(item)
+                        img_list[i]=tmp_url
                         }
-                        if(i==arr.length-1){
-                        //接下来的操作
-                        wx.hideLoading()
-                        var imgUrls=img_list.valueOf()
-                        wx.previewImage({
-                            current: url,
-                            urls: imgUrls
-                        })
-                        }
+                        that.setData({img_list: img_list})
+                        pause=false
                     }
+                });*/
+                }else if(ending==videoEnding[item]){
+                isVideo=true
+                }else{
+
                 }
-                });
-            }else if(ending==".ppt",".pptx",".xls",".xlsx"){
-              that.cosPreview(item) //调用COS的预览接口支持预览
-            }else if(cosSupportB){
-              console.log("cos次级支持")
-              //that.cosPreview(item)
-            }else{
-              wx.showModal({
-                title:"提示",
-                content:"电脑暂不支持预览该类型文件，请尝试用手机打开。",
-                showCancel:false
-              })
-              wx.hideLoading()
-              return
             }
-          }else{
-            wx.hideLoading()
-            if(isDoc){
-              that.setData({
-                showDownloadModal:true,
-                downloadPercent:0
-              })
-              const basepath = `${wx.env.USER_DATA_PATH}/`
-              var downloadTask=wx.downloadFile({
-                url: url,
-                filePath: basepath+fileName,
-                success (res) {
-                    wx.openDocument({
-                        filePath: res.filePath,
-                        fileType: ending.substring(1,ending.length),
-                        showMenu: true,
-                        success(){
-                        },
-                        complete: function(){
-                          wx.hideLoading()
-                        },
-                        fail(res){
-                          console.error(res)
-                          wx.showModal({
-                            title: '文件打开失败',
-                            content: JSON.stringify(res)+"请截图联系开发者"
-                          })
+            for(var endFix in cosSupport){
+                if(ending=="."+cosSupport[endFix]){
+                cosSupportB=true
+                }
+            }
+            var fileobjList=that.data.files
+            var fileinfo={}
+            for(var index in fileobjList){
+                if(fileobjList[index].Key==item_name){
+                fileinfo=fileobjList[index]
+                }
+            }
+            if(fileinfo.size > 100*1024*1024){
+                //大于10MB的文件微信不能直接预览
+                console.warn("文件大于20MB")
+                isDoc=false
+                if(ending==".ppt",".pptx",".xls",".xlsx"){
+                cosSupportB=true
+                console.log("cos support max file")
+                }else{
+                
+                }
+            }
+            console.log(fileinfo)
+            var platform=""
+            var pc=false
+            wx.getSystemInfo({
+                success: (sys) => {
+                platform=sys.platform
+                getApp().globalData.path=that.data.path
+                console.log("Set path global",getApp())
+                if(platform == "windows" || platform=="mac" || platform=="pc"){
+                    pc=true
+                }
+                if(pc){
+                    console.log(pc)
+                    if(ending==".doc" || ending==".docx" || ending==".pdf"){
+                    console.log("直接支持PC端预览")
+                    that.setData({
+                        showDownloadModal:true,
+                        downloadPercent:0
+                    })
+                    wx.getSavedFileList({
+                        success (res) {
+                        console.log(res.fileList)
                         }
                     })
-                },
-                fail(res){
-                    if(res.errMsg=="downloadFile:fail abort"){
-                        //用户主动取消下载
+                    const basepath = `${wx.env.USER_DATA_PATH}/`
+                    var downloadTask=wx.downloadFile({
+                        url: url,
+                        filePath: basepath+fileName,
+                        success (res) {
+                            wx.openDocument({
+                                filePath: res.filePath,
+                                fileType: ending.substring(1,ending.length),
+                                showMenu: true,
+                                success(){
+                                },
+                                complete: function(){
+                                wx.hideLoading()
+                                },
+                                fail(res){
+                                if(res.errMsg=="downloadFile:fail abort"){
+                                    //用户主动取消下载
+                                }else{
+                                    console.error(res)
+                                    wx.showModal({
+                                        title: '文件下载失败',
+                                        content: JSON.stringify(res)+"请截图联系开发者"
+                                    })
+                                }
+                                }
+                            })
+                        },
+                        fail(res){
+                            if(res.errMsg=="downloadFile:fail abort"){
+                                //用户主动取消下载
+                            }else{
+                                console.error(res)
+                                wx.showModal({
+                                    title: '文件下载失败',
+                                    content: JSON.stringify(res)+"请截图联系开发者"
+                                })
+                            }
+                        },
+                        complete(){
+                        that.setData({
+                            showDownloadModal:false,
+                            downloadPercent:0
+                        })
+                        }
+                    })
+                    that.setData({downloadTask: downloadTask})
+                    downloadTask.onProgressUpdate(function(res){
+                        var progress=res.progress
+                        var totalMb=res.totalBytesExpectedToWrite/1024/1024
+                        var writtenMb=res.totalBytesWritten/1024/1024
+                        totalMb=totalMb.toFixed(2)
+                        writtenMb=writtenMb.toFixed(2)
+                        that.setData({
+                        downloadPercent: progress,
+                        totalMb: totalMb,
+                        writtenMb: writtenMb
+                        })
+                    })
+                    }else if(isImg){
+                        wx.showLoading({
+                            title: '加载中...',
+                        })
+                        that.data.cos.getBucket({
+                        Bucket: that.data.bucket, // 填入您自己的存储桶，必须字段 
+                        Region: 'ap-guangzhou',  // 存储桶所在地域，例如ap-beijing，必须字段 
+                        Prefix: that.data.path,           // Prefix表示列出的object的key以prefix开始，非必须 
+                        Delimiter: '/'
+                        }, function(err, data) {
+                        if (err) {
+                            console.error(err)
+                            wx.showModal({
+                            title: '获取文件列表失败',
+                            content: JSON.stringify(err)+"请截图联系开发者"
+                            })
+                            return console.log('list error:', err);
+                        } else {
+                            var arr=data.Contents
+                            for (let i = 0, len = arr.length; i < len; i++) {
+                                var item=arr[i]
+                                var img_key=item.Key
+                                var tmp_url = that.data.cos.getObjectUrl({
+                                Bucket: that.data.bucket,
+                                Region: 'ap-guangzhou',
+                                Key: img_key
+                                });
+                                if(item.Key!=that.data.path){
+                                img_list.push(tmp_url)
+                                console.log(item)
+                                }
+                                if(i==arr.length-1){
+                                //接下来的操作
+                                wx.hideLoading()
+                                var imgUrls=img_list.valueOf()
+                                wx.previewImage({
+                                    current: url,
+                                    urls: imgUrls
+                                })
+                                }
+                            }
+                        }
+                        });
+                    }else if(ending==".ppt",".pptx",".xls",".xlsx"){
+                    that.cosPreview(that.cosPreview(that.data.path+"/"+item_name)) //调用COS的预览接口支持预览
+                    }else if(cosSupportB){
+                    console.log("cos次级支持")
+                    //that.cosPreview(item)
                     }else{
+                    wx.showModal({
+                        title:"提示",
+                        content:"电脑暂不支持预览该类型文件，请尝试用手机打开。",
+                        showCancel:false
+                    })
+                    wx.hideLoading()
+                    return
+                    }
+                }else{
+                    wx.hideLoading()
+                    if(isDoc){
+                    that.setData({
+                        showDownloadModal:true,
+                        downloadPercent:0
+                    })
+                    const basepath = `${wx.env.USER_DATA_PATH}/`
+                    var downloadTask=wx.downloadFile({
+                        url: url,
+                        filePath: basepath+fileName,
+                        success (res) {
+                            wx.openDocument({
+                                filePath: res.filePath,
+                                fileType: ending.substring(1,ending.length),
+                                showMenu: true,
+                                success(){
+                                },
+                                complete: function(){
+                                wx.hideLoading()
+                                },
+                                fail(res){
+                                console.error(res)
+                                wx.showModal({
+                                    title: '文件打开失败',
+                                    content: JSON.stringify(res)+"请截图联系开发者"
+                                })
+                                }
+                            })
+                        },
+                        fail(res){
+                            if(res.errMsg=="downloadFile:fail abort"){
+                                //用户主动取消下载
+                            }else{
+                                console.error(res)
+                                wx.showModal({
+                                    title: '文件下载失败',
+                                    content: JSON.stringify(res)+"请截图联系开发者"
+                                })
+                            }
+                        },
+                        complete(){
+                        that.setData({
+                            showDownloadModal:false,
+                            downloadPercent:0
+                        })
+                        }
+                    })
+                    that.setData({downloadTask: downloadTask})
+                    downloadTask.onProgressUpdate(function(res){
+                        var progress=res.progress
+                        var totalMb=res.totalBytesExpectedToWrite/1024/1024
+                        var writtenMb=res.totalBytesWritten/1024/1024
+                        totalMb=totalMb.toFixed(2)
+                        writtenMb=writtenMb.toFixed(2)
+                        that.setData({
+                        downloadPercent: progress,
+                        totalMb: totalMb,
+                        writtenMb: writtenMb
+                        })
+                    })
+                    }else if(isImg){
+                    wx.showLoading({
+                        title: '加载中...',
+                    })
+                    that.data.cos.getBucket({
+                        Bucket: that.data.bucket, // 填入您自己的存储桶，必须字段 
+                        Region: 'ap-guangzhou',  // 存储桶所在地域，例如ap-beijing，必须字段 
+                        Prefix: that.data.path,           // Prefix表示列出的object的key以prefix开始，非必须 
+                        Delimiter: '/'
+                    }, function(err, data) {
+                        if (err) {
+                        console.error(err)
+                        wx.showModal({
+                            title: '获取文件列表失败',
+                            content: JSON.stringify(err)+"请截图联系开发者"
+                        })
+                        return console.log('list error:', err);
+                        } else {
+                            var arr=data.Contents
+                            for (let i = 0, len = arr.length; i < len; i++) {
+                            var item=arr[i]
+                            var img_key=item.Key
+                            var tmp_url = that.data.cos.getObjectUrl({
+                                Bucket: that.data.bucket,
+                                Region: 'ap-guangzhou',
+                                Key: img_key
+                            });
+                            if(item.Key!=that.data.path){
+                                img_list.push(tmp_url)
+                                console.log(item)
+                            }
+                            if(i==arr.length-1){
+                                //接下来的操作
+                                wx.hideLoading()
+                                var imgUrls=img_list.valueOf()
+                                wx.previewImage({
+                                current: url,
+                                urls: imgUrls
+                                })
+                            }
+                            }
+                        }
+                    });
+                    }else if(isVideo){
+                    //判断为音频文件，则打开模态进行播放
+                    const basepath = `${wx.env.USER_DATA_PATH}/`
+                    wx.downloadFile({
+                        url: url,
+                        filePath: basepath+fileName,
+                        success (res) {
+                        if (res.statusCode === 200) {
+                            var filePath=basepath+fileName
+                            var audioContext=wx.createInnerAudioContext()
+                            audioContext.src=filePath
+                            audioContext.onTimeUpdate(function(){
+                            var currentTime=Math.round(audioContext.currentTime)
+                            var duration=Math.round(audioContext.duration)
+                            var percent=(currentTime/duration)*100
+                            that.setData({
+                                musicPercent:percent,
+                                duration:duration,
+                                currentTime:currentTime
+                            })
+                            })
+                            audioContext.onEnded(function(){
+                            var duration=Math.round(audioContext.duration)
+                            that.setData({currentTime:duration})
+                            })
+                            audioContext.onPlay(function(){
+                            var currentTime=Math.round(audioContext.currentTime)
+                            var duration=Math.round(audioContext.duration)
+                            var percent=(currentTime/duration)*100
+                            that.setData({
+                                musicPercent:percent,
+                                duration:duration,
+                                currentTime:currentTime
+                            })
+                            })
+                            audioContext.onPause(function(){
+                            var currentTime=Math.round(audioContext.currentTime)
+                            var duration=Math.round(audioContext.duration)
+                            var percent=(currentTime/duration)*100
+                            that.setData({
+                                musicPercent:percent,
+                                duration:duration,
+                                currentTime:currentTime
+                            })
+                            })
+                            that.setData({audioContext:audioContext})
+                            that.showModal()
+                        }
+                        }
+                    })
+                    }else if(cosSupportB){
+                        console.log("COS预览支持")
+                        that.cosPreview(that.data.path+"/"+item_name) //调用COS的预览接口支持预览
+                    }else{
+                    console.log(cosSupportB)
+                    that.setData({
+                        showDownloadModal:true,
+                        downloadPercent:0
+                    })
+                    const basepath = `${wx.env.USER_DATA_PATH}/`
+                    var downloadTask=wx.downloadFile({
+                        url: url,
+                        filePath: basepath+fileName,
+                        success (res) {
+                            wx.openDocument({
+                                filePath: res.filePath,
+                                fileType: ending.substring(1,ending.length),
+                                showMenu: true,
+                                success(){
+                                },
+                                complete: function(){
+                                wx.hideLoading()
+                                },
+                                fail(res){
+                                console.error(res)
+                                if(res.errMsg=="openDocument:fail filetype not supported"){
+                                    wx.showModal({
+                                        title: '不支持的格式',
+                                        content: "暂不支持该文件格式的预览，请复制链接到浏览器下载查看。"
+                                    })
+                                }else if(res.errMsg=="downloadFile:fail abort"){
+                                    //用户主动取消下载
+                                }else{
+                                    console.error(res)
+                                    wx.showModal({
+                                        title: '文件下载失败',
+                                        content: JSON.stringify(res)+"请截图联系开发者"
+                                    })
+                                }
+                                }
+                            })
+                        },
+                        fail(res){
                         console.error(res)
                         wx.showModal({
                             title: '文件下载失败',
                             content: JSON.stringify(res)+"请截图联系开发者"
                         })
-                    }
-                },
-                complete(){
-                  that.setData({
-                    showDownloadModal:false,
-                    downloadPercent:0
-                  })
-                }
-              })
-              that.setData({downloadTask: downloadTask})
-              downloadTask.onProgressUpdate(function(res){
-                var progress=res.progress
-                var totalMb=res.totalBytesExpectedToWrite/1024/1024
-                var writtenMb=res.totalBytesWritten/1024/1024
-                totalMb=totalMb.toFixed(2)
-                writtenMb=writtenMb.toFixed(2)
-                that.setData({
-                  downloadPercent: progress,
-                  totalMb: totalMb,
-                  writtenMb: writtenMb
-                })
-              })
-            }else if(isImg){
-              wx.showLoading({
-                title: '加载中...',
-              })
-              that.data.cos.getBucket({
-                Bucket: that.data.bucket, // 填入您自己的存储桶，必须字段 
-                Region: 'ap-guangzhou',  // 存储桶所在地域，例如ap-beijing，必须字段 
-                Prefix: that.data.path,           // Prefix表示列出的object的key以prefix开始，非必须 
-                Delimiter: '/'
-              }, function(err, data) {
-                if (err) {
-                  console.error(err)
-                  wx.showModal({
-                    title: '获取文件列表失败',
-                    content: JSON.stringify(err)+"请截图联系开发者"
-                  })
-                  return console.log('list error:', err);
-                } else {
-                    var arr=data.Contents
-                    for (let i = 0, len = arr.length; i < len; i++) {
-                      var item=arr[i]
-                      var img_key=item.Key
-                      var tmp_url = that.data.cos.getObjectUrl({
-                        Bucket: that.data.bucket,
-                        Region: 'ap-guangzhou',
-                        Key: img_key
-                      });
-                      if(item.Key!=that.data.path){
-                        img_list.push(tmp_url)
-                        console.log(item)
-                      }
-                      if(i==arr.length-1){
-                        //接下来的操作
-                        wx.hideLoading()
-                        var imgUrls=img_list.valueOf()
-                        wx.previewImage({
-                          current: url,
-                          urls: imgUrls
+                        },
+                        complete(){
+                        that.setData({
+                            showDownloadModal:false,
+                            downloadPercent:0
                         })
-                      }
-                    }
-                }
-              });
-            }else if(isVideo){
-              //判断为音频文件，则打开模态进行播放
-              const basepath = `${wx.env.USER_DATA_PATH}/`
-              wx.downloadFile({
-                url: url,
-                filePath: basepath+fileName,
-                success (res) {
-                  if (res.statusCode === 200) {
-                    var filePath=basepath+fileName
-                    var audioContext=wx.createInnerAudioContext()
-                    audioContext.src=filePath
-                    audioContext.onTimeUpdate(function(){
-                      var currentTime=Math.round(audioContext.currentTime)
-                      var duration=Math.round(audioContext.duration)
-                      var percent=(currentTime/duration)*100
-                      that.setData({
-                        musicPercent:percent,
-                        duration:duration,
-                        currentTime:currentTime
-                      })
-                    })
-                    audioContext.onEnded(function(){
-                      var duration=Math.round(audioContext.duration)
-                      that.setData({currentTime:duration})
-                    })
-                    audioContext.onPlay(function(){
-                      var currentTime=Math.round(audioContext.currentTime)
-                      var duration=Math.round(audioContext.duration)
-                      var percent=(currentTime/duration)*100
-                      that.setData({
-                        musicPercent:percent,
-                        duration:duration,
-                        currentTime:currentTime
-                      })
-                    })
-                    audioContext.onPause(function(){
-                      var currentTime=Math.round(audioContext.currentTime)
-                      var duration=Math.round(audioContext.duration)
-                      var percent=(currentTime/duration)*100
-                      that.setData({
-                        musicPercent:percent,
-                        duration:duration,
-                        currentTime:currentTime
-                      })
-                    })
-                    that.setData({audioContext:audioContext})
-                    that.showModal()
-                  }
-                }
-              })
-            }else if(cosSupportB){
-              console.log("COS预览支持")
-              that.cosPreview(item) //调用COS的预览接口支持预览
-            }else{
-              console.log(cosSupportB)
-              that.setData({
-                showDownloadModal:true,
-                downloadPercent:0
-              })
-              const basepath = `${wx.env.USER_DATA_PATH}/`
-              var downloadTask=wx.downloadFile({
-                url: url,
-                filePath: basepath+fileName,
-                success (res) {
-                    wx.openDocument({
-                        filePath: res.filePath,
-                        fileType: ending.substring(1,ending.length),
-                        showMenu: true,
-                        success(){
-                        },
-                        complete: function(){
-                          wx.hideLoading()
-                        },
-                        fail(res){
-                          console.error(res)
-                          if(res.errMsg=="openDocument:fail filetype not supported"){
-                            wx.showModal({
-                                title: '不支持的格式',
-                                content: "暂不支持该文件格式的预览，请复制链接到浏览器下载查看。"
-                            })
-                          }else if(res.errMsg=="downloadFile:fail abort"){
-                              //用户主动取消下载
-                          }else{
-                              console.error(res)
-                              wx.showModal({
-                                  title: '文件下载失败',
-                                  content: JSON.stringify(res)+"请截图联系开发者"
-                              })
-                          }
                         }
                     })
+                    that.setData({downloadTask: downloadTask})
+                    downloadTask.onProgressUpdate(function(res){
+                        var progress=res.progress
+                        var totalMb=res.totalBytesExpectedToWrite/1024/1024
+                        var writtenMb=res.totalBytesWritten/1024/1024
+                        totalMb=totalMb.toFixed(2)
+                        writtenMb=writtenMb.toFixed(2)
+                        that.setData({
+                        downloadPercent: progress,
+                        totalMb: totalMb,
+                        writtenMb: writtenMb
+                        })
+                    })
+                    /*wx.setClipboardData({
+                        data: url,
+                        success: function(){
+                        wx.showModal({
+                            title: '提示' ,
+                            content: '由于微信限制，无法直接下载。链接已复制，请到手机浏览器粘贴下载。链接5分钟内有效。' ,
+                            success: function (res) {
+                            if (res.confirm) {
+                            }
+                            }
+                        })
+                        },
+                        fail: function(){
+                        console.error(res)
+                        wx.showModal({
+                            title: '链接复制失败',
+                            content: JSON.stringify(res)+"请截图联系开发者"
+                        })
+                        }
+                    })*/
+                    }
+                }
                 },
                 fail(res){
-                  console.error(res)
-                  wx.showModal({
-                    title: '文件下载失败',
+                console.error(res)
+                wx.showModal({
+                    title: '获取系统信息失败',
                     content: JSON.stringify(res)+"请截图联系开发者"
-                  })
-                },
-                complete(){
-                  that.setData({
-                    showDownloadModal:false,
-                    downloadPercent:0
-                  })
-                }
-              })
-              that.setData({downloadTask: downloadTask})
-              downloadTask.onProgressUpdate(function(res){
-                var progress=res.progress
-                var totalMb=res.totalBytesExpectedToWrite/1024/1024
-                var writtenMb=res.totalBytesWritten/1024/1024
-                totalMb=totalMb.toFixed(2)
-                writtenMb=writtenMb.toFixed(2)
-                that.setData({
-                  downloadPercent: progress,
-                  totalMb: totalMb,
-                  writtenMb: writtenMb
                 })
-              })
-              /*wx.setClipboardData({
-                data: url,
-                success: function(){
-                  wx.showModal({
-                    title: '提示' ,
-                    content: '由于微信限制，无法直接下载。链接已复制，请到手机浏览器粘贴下载。链接5分钟内有效。' ,
-                    success: function (res) {
-                    if (res.confirm) {
-                    }
-                    }
-                  })
-                },
-                fail: function(){
-                  console.error(res)
-                  wx.showModal({
-                    title: '链接复制失败',
-                    content: JSON.stringify(res)+"请截图联系开发者"
-                  })
                 }
-              })*/
-            }
+            });
           }
         },
-        fail(res){
+        fail(res) {
           console.error(res)
-          wx.showModal({
-            title: '获取系统信息失败',
-            content: JSON.stringify(res)+"请截图联系开发者"
-          })
         }
-      });
+      })
     }
+  },
+  newly_preview: function() {
+      
   },
   search_download: function(res){
     var result=res
@@ -918,7 +1010,7 @@ Page({
           url: finalUrl,
           success (res) {
               wx.openDocument({
-                  filePath: basepath+fileName,
+                  filePath: basepath+fileName+".pdf",
                   fileType: "pdf",
                   showMenu: true,
                   success(){

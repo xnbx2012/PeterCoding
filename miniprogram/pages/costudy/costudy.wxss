@@ -1,6 +1,6 @@
 /* miniprogram/pages/costudy/costudy.wxss */
 .show-btn {
-  margin-top: 100rpx;
+  margin-top: 100px;
   color: #2c89e5;
 }
 
@@ -25,59 +25,59 @@
   left: 5%;
   z-index: 9999;
   background: #f9f9f9;
-  border-radius: 10rpx;
+  border-radius: 10px;
 }
 
 .modal-title {
-  padding-top: 50rpx;
-  font-size: 48rpx;
+  padding-top: 50px;
+  font-size: 48px;
   color: #030303;
   text-align: center;
   font-weight: 700;
 }
 
 .modal-content {
-  padding: 50rpx 32rpx;
+  padding: 50px 32px;
 }
 
 .modal-input {
   display: flex;
   background: #fff;
-  border: 2rpx solid #ddd;
-  border-radius: 4rpx;
-  font-size: 28rpx;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 28px;
 }
 
 
 .input {
   width: 100%;
-  height: 82rpx;
-  font-size: 28rpx;
-  line-height: 28rpx;
-  padding: 0 20rpx;
+  height: 25px;
+  font-size: 17px;
+  line-height: 17px;
+  padding: 0 20px;
   box-sizing: border-box;
   color: #333;
 }
 
 input-holder {
   color: #666;
-  font-size: 28rpx;
+  font-size: 28px;
 }
 
 .modal-footer {
   display: flex;
   flex-direction: row;
-  height: 86rpx;
-  border-top: 1rpx solid #dedede;
-  font-size: 34rpx;
-  line-height: 86rpx;
+  height: 86px;
+  border-top: 1px solid #dedede;
+  font-size: 34px;
+  line-height: 86px;
 }
 
 .btn-cancel {
   width: 50%;
   color: #666;
   text-align: center;
-  border-right: 1rpx solid #dedede;
+  border-right: 1px solid #dedede;
 }
 
 .btn-confirm {
@@ -87,8 +87,8 @@ input-holder {
 }
 
 .gap{
-  margin-top: 13rpx;
-  margin-bottom: 13rpx;
+  margin-top: 13px;
+  margin-bottom: 13px;
 }
 
 .background_view{
@@ -100,27 +100,26 @@ input-holder {
 }
 
 .containerView{
-  border-radius: 10rpx;
+  border-radius: 10px;
   background-color: rgba(255,255,255,0.9);
   width: 90%;
   height: 85%;
   top: 10%;
   left: 5%;
   position: relative;
-  box-shadow: 0 0 7rpx 7rpx rgba(44, 137, 229, 0.6);
+  box-shadow: 0 0 7px 7px rgba(44, 137, 229, 0.6);
 }
 
 .page-section{
-  margin-left: 15rpx;
-  margin-right: 15rpx;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .detail {
-  margin: 10rpx auto;
-  font-size: 25rpx;
-  line-height: 40rpx;
-  font-size: 30rpx;
-  height: 225rpx;
+  margin: 10px auto;
+  line-height: 17px;
+  font-size: 17px;
+  height: 136px;
   transition: height 1s;
   -moz-transition: height 1s;
   /* Firefox 4 */
@@ -133,13 +132,13 @@ input-holder {
 
 .page-section-title{
   font-weight: 700;
-  margin-left: 15rpx;
-  margin-right: 15rpx;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 .marquee2{
   display: inline-block;
   white-space: nowrap;
-  margin-left: 750rpx;
+  margin-left: 750px;
 }
 .notify{
   overflow: scroll;

@@ -65,28 +65,6 @@ Page({
         return { query: 'path='+that.data.path }
       })
     }
-    //START 清除缓存文件
-    var fs = wx.getFileSystemManager()
-    fs.readdir({
-      dirPath: `${wx.env.USER_DATA_PATH}`,
-      success(res) {
-        var listFile=res.files
-        for(var index in listFile){
-          if(listFile[index] != "miniprogramLog"){
-            var tmpPath=`${wx.env.USER_DATA_PATH}/`+ listFile[index]
-            fs.unlink({
-              filePath: tmpPath,
-              success(res){console.log(res)},
-              fail(res){console.error(res)}
-            })
-          }
-        }
-      },
-      fail(res) {
-        console.error(res)
-      }
-    })
-    //END 清除缓存文件
     const db = wx.cloud.database();
     db.collection('info').get({
       success: function (res) {

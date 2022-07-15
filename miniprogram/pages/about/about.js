@@ -5,7 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    date: 2022
+    date: 2022,
+    size: 0
   },
 
   /**
@@ -27,6 +28,16 @@ Page({
         console.log(res)        
       }
     })
+    wx.getStorage({
+        key: 'savedSize',
+        success (res) {
+          console.log(res.data)
+          that.setData({size: that.unitTransform(res.data)})
+        },
+        fail:function(res) {
+                                     
+        }
+    })
   },
 
   /**
@@ -40,28 +51,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    //START 清除缓存文件
-    var fs = wx.getFileSystemManager()
-    fs.readdir({
-      dirPath: `${wx.env.USER_DATA_PATH}`,
-      success(res) {
-        var listFile=res.files
-        for(var index in listFile){
-          if(listFile[index] != "miniprogramLog"){
-            var tmpPath=`${wx.env.USER_DATA_PATH}/`+ listFile[index]
-            fs.unlink({
-              filePath: tmpPath,
-              success(res){console.log(res)},
-              fail(res){console.error(res)}
-            })
-          }
-        }
-      },
-      fail(res) {
-        console.error(res)
-      }
-    })
-    //END 清除缓存文件
   },
 
   /**
@@ -76,6 +65,44 @@ Page({
    */
   onUnload: function () {
 
+  },
+  clear: function(res) {
+      //START 清除缓存文件
+    var fs = wx.getFileSystemManager()
+    fs.readdir({
+      dirPath: `${wx.env.USER_DATA_PATH}`,
+      success(res) {
+        var listFile=res.files
+        if(listFile.length<=0){
+            wx.showModal({
+              title:"清除缓存",
+              content:"无需清除缓存",
+              showCancel:false
+            })
+        }
+        for(var index in listFile){
+          if(listFile[index] != "miniprogramLog"){
+            var tmpPath=`${wx.env.USER_DATA_PATH}/`+ listFile[index]
+            fs.unlink({
+              filePath: tmpPath,
+              success(res){console.log(res)},
+              fail(res){console.error(res)}
+            })
+            if(index>=listFile.length-1){
+                wx.showModal({
+                  title:"清除缓存",
+                  content:"缓存清除成功",
+                  showCancel:false
+                })
+            }
+          }
+        }
+      },
+      fail(res) {
+        console.error(res)
+      }
+    })
+    //END 清除缓存文件
   },
 
   /**
@@ -97,6 +124,42 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  github: function(res) {
+    wx.setClipboardData({
+        data: 'https://github.com/xnbx2012/PeterCoding',
+        success (res) {
+            wx.hideToast()
+          wx.getClipboardData({
+            success (res) {
+                wx.showModal({
+                  title:"GitHub",
+                  content:"GitHub地址已复制，请粘贴到浏览器查看。记得Star哦！",
+                  showCancel:false
+                })
+              console.log(res.data) // data
+            }
+          })
+        }
+      })
+  },
+  githee: function(res) {
+    wx.setClipboardData({
+        data: 'https://gitee.com/PeterZhong1219/peter-coding',
+        success (res) {
+            wx.hideToast()
+          wx.getClipboardData({
+            success (res) {
+                wx.showModal({
+                  title:"Gitee",
+                  content:"Gitee地址已复制，请粘贴到浏览器查看。",
+                  showCancel:false
+                })
+              console.log(res.data) // data
+            }
+          })
+        }
+      })
   },
 
   onChooseFile: function(){
@@ -196,5 +259,17 @@ Page({
         console.log(res)        
       }
     })
+  },
+
+  unitTransform: function(bite) {
+    var result=bite.toFixed(2)+"字节" 
+    if(bite>1024*1024*1024){ //GB
+        result=(bite/(1024*1024*1024)).toFixed(2)+"GB"
+    }else if(bite>1024*1024){ //MB
+        result=(bite/(1024*1024)).toFixed(2)+"MB"
+    }else if(bite>1024){ //KB
+        result=(bite/(1024)).toFixed(2)+"KB"
+    }
+    return result
   }
 })

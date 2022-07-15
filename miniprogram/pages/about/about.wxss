@@ -138,4 +138,8 @@ text{
   flex-direction:row;
 }
 
+.open-source{
+    padding: 20px;
+}
+
 @import 'about-wxa-auto-dark.wxss'

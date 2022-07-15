@@ -30,6 +30,14 @@ PeterCoding小程序发布于微信平台，目前有两个主要功能
 
 ## 更新日志
 <details>
+<summary>2022.07.10(v4.2.1)</summary><br>
+· 新增 文件自动缓存节省流量<br>
+· 新增 清除缓存按钮<br>
+· 新增 开源项目标签<br>
+PS：如遇文件下载失败，可尝试清除缓存后再下载<br>
+</details>
+
+<details>
 <summary>2022.05.04(v4.1.2)</summary><br>
 · 优化 响应式UI设计<br>
 · 优化 横屏状态下UI显示<br>
